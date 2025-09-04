@@ -1145,37 +1145,41 @@
 
         function saveFormData(data) {
             try {
-                // Récupérer les données existantes
-                let prospects = JSON.parse(localStorage.getItem('prospects') || '[]');
-                
-                // Ajouter les nouvelles données
-                prospects.push(data);
-                
-                // Sauvegarder
-                localStorage.setItem('prospects', JSON.stringify(prospects));
-                
-                // Sauvegarder le fichier si présent
-                if (uploadedFile) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const fileData = {
-                            id: data.timestamp,
-                            name: uploadedFile.name,
-                            type: uploadedFile.type,
-                            size: uploadedFile.size,
-                            data: e.target.result
-                        };
-                        
-                        let files = JSON.parse(localStorage.getItem('prospect_files') || '[]');
-                        files.push(fileData);
-                        localStorage.setItem('prospect_files', JSON.stringify(files));
-                    };
-                    reader.readAsDataURL(uploadedFile);
+                // URL du webhook Google Apps Script
+                const webhookUrl = 'https://script.google.com/macros/s/AKfycbwIteUKSH-jiPyWOj_DFgvEB9JpktjkkZ6QXuof2GQ4YJi_swO3y3dhRTPWVZLUM-AM1w/exec';
+
+                // Préparer les données à envoyer
+                const formData = new FormData();
+
+                // Ajouter toutes les propriétés de data au FormData
+                for (const [key, value] of Object.entries(data)) {
+                    formData.append(key, value);
                 }
-                
-                console.log('Données sauvegardées avec succès');
+
+                // Ajouter le fichier si présent
+                if (uploadedFile) {
+                    formData.append('file', uploadedFile);
+                }
+
+                // Envoyer vers le webhook
+                fetch(webhookUrl, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Données envoyées avec succès vers Google Apps Script');
+                    } else {
+                        console.error('Erreur lors de l\'envoi:', response.statusText);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur lors de l\'envoi vers le webhook:', error);
+                });
+
+                console.log('Données préparées pour envoi vers Google Apps Script');
             } catch (error) {
-                console.error('Erreur lors de la sauvegarde:', error);
+                console.error('Erreur lors de la préparation des données:', error);
             }
         }
 
@@ -1394,9 +1398,9 @@
 </html>
     <script id="html_badge_script1">
         window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
-            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDlpikllQ6wnHJ551WcxI4MxMTeT31P9gunh5z8lf8dg3JJGfKo67TevS2rX%2FylV9NY5XZpI0P1I9xelMfiZFQqU%2BTKLh5hCEYm%2BiqSPQK%2B%2BLi0si0nmH7M0J6UUy1cABdx9K0CwyXwbwNblkvz2kGls67GNMoL9WJ6rstK0sWahAPWLi63KRHpJ%2B8WO%2FaoHojj8b93zLDa82W52arigQfrD4nLdI9aV3vRFydLAhBJArNmWoomEgbuZ8kREIhbBQubBflgha93qTnP8szoj2WOkpzOcBt%2FudIDyVZzwFozpDIRULEqNbShAEqjx%2BoTTCnzCuT0%2B3btoBf30g39hfemodFX%2F%2BRELKhjypPKn%2BDlVqNogQax0N6NAg4CX5meRySY%2BJyWwDFqyKWmczMRuSf9Rb389qr2G7xYaXpRJ56wywtTbEJsHJlVo%2FlNAMhI35yXhrCcZPJzdMwehu8EWrO14A%2F7VJDH39Iq0TxsFh3EqRCBq9HEGATW3CaxTxLaRP%2B7UCwpCVoMQWjoFjjcCPwqU%3D";
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDt5QlTvWMew0GavWC%2BKO7k3eUdrNN4IuOS5oDJ%2FB9DNgw2PgvaEhImGm8bsCvKHPBOimsuL84cOomp0TfsGO8%2B7DOtGV8C4DCNRzEFInETqJhevmoJjW%2BjLR3s6g%2FJpRIaZEp43QEDMXrAyIRB0MYfnswb6lqyIH4zJhFo3e3zQH1Sk%2FHy22rskypXxAnssxHAlx049QAiZBgN0Aog6iRfP%2BLkV4j0NEuZjQ78Z94s4TzHhWamer4IXsjgPlaDT2F0chVRSFHD6ffCurAhHmPuNMq13sRsciM9909iAs2IBYGjv0jncPaIok5m8HxF62sFkN36C5mg5fLh5JV114vSGArZg7djmaHt6yy6Z2xeU1R%2FdQzzuaRpeoZDTvTPtL8JVs6rGQS74cD545bkksXbB6A05eJoqMPQr2wvimspI4CgwWSIWCSMDu4kcde6jImWYhjOPqjI1%2FN7GFVxXSW%2FnVsc7gvnSrh6yhrgu0Kh9ZqIHrRKxFbqNKDHu2ZSgyLD95dwRU1fm%2Fv89zlwxi8Zo%3D";
         window.__genspark_locale = "fr-FR";
-        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDlpikllQ6wnHJ551WcxI4MxMTeT31P9gunh5z8lf8dg3JJGfKo67TevS2rX/ylV9NY5XZpI0P1I9xelMfiZFQqU+TKLh5hCEYm+iqSPQK++Li0si0nmH7M0J6UUy1cABdx9K0CwyXwbwNblkvz2kGls67GNMoL9WJ6rstK0sWahAPWLi63KRHpJ+8WO/aoHojj8b93zLDa82W52arigQfrD4nLdI9aV3vRFydLAhBJArNmWoomEgbuZ8kREIhbBQubBflgha93qTnP8szoj2WOkpzOcBt/udIDyVZzwFozpDIRULEqNbShAEqjx+oTTCnzCuT0+3btoBf30g39hfemodFX/+RELKhjypPKn+DlVqNogQax0N6NAg4CX5meRySY+JyWwDFqyKWmczMRuSf9Rb389qr2G7xYaXpRJ56wywtTbEJsHJlVo/lNAMhI35yXhrCcZPJzdMwehu8EWrO14A/7VJDH39Iq0TxsFh3EqRCBq9HEGATW3CaxTxLaRP+7UCwpCVoMQWjoFjjcCPwqU=";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDt5QlTvWMew0GavWC+KO7k3eUdrNN4IuOS5oDJ/B9DNgw2PgvaEhImGm8bsCvKHPBOimsuL84cOomp0TfsGO8+7DOtGV8C4DCNRzEFInETqJhevmoJjW+jLR3s6g/JpRIaZEp43QEDMXrAyIRB0MYfnswb6lqyIH4zJhFo3e3zQH1Sk/Hy22rskypXxAnssxHAlx049QAiZBgN0Aog6iRfP+LkV4j0NEuZjQ78Z94s4TzHhWamer4IXsjgPlaDT2F0chVRSFHD6ffCurAhHmPuNMq13sRsciM9909iAs2IBYGjv0jncPaIok5m8HxF62sFkN36C5mg5fLh5JV114vSGArZg7djmaHt6yy6Z2xeU1R/dQzzuaRpeoZDTvTPtL8JVs6rGQS74cD545bkksXbB6A05eJoqMPQr2wvimspI4CgwWSIWCSMDu4kcde6jImWYhjOPqjI1/N7GFVxXSW/nVsc7gvnSrh6yhrgu0Kh9ZqIHrRKxFbqNKDHu2ZSgyLD95dwRU1fm/v89zlwxi8Zo=";
     </script>
     
     <script id="html_notice_dialog_script" src="https://www.genspark.ai/notice_dialog.js"></script>
