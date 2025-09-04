@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VéloCEE Mobilité - Votre Vélo électrique Professionnel 100% financé par le dispositif CEE</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+        .hero-bg {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+        .card {
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        .step-indicator {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        .form-step {
+            display: none;
+        }
+        .form-step.active {
+            display: block;
+        }
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+        }
+        .admin-content {
+            background: white;
+            margin: 2% auto;
+            padding: 20px;
+            width: 95%;
+            height: 90%;
+            overflow-y: auto;
+            border-radius: 10px;
+        }
+        .login-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+        }
+        .progress-bar {
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            height: 6px;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        .file-upload-area {
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .file-upload-area:hover {
+            border-color: #10b981;
+            background-color: #f0fdf4;
+        }
+        .file-upload-area.dragover {
+            border-color: #10b981;
+            background-color: #f0fdf4;
+        }
+        .btn-disabled {
+            background: #9ca3af !important;
+            cursor: not-allowed !important;
+            opacity: 0.6;
+        }
+        .error-message {
+            color: #ef4444;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .success-message {
+            color: #10b981;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center">
+                    <img src="https://page.gensparksite.com/v1/base64_upload/b3b2a66eaf698b31511c5a63994e6548" alt="VéloCEE Mobilité" class="h-16 w-auto">
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#dispositif" class="text-gray-700 hover:text-blue-600 font-medium">Le dispositif</a>
+                    <a href="#velo" class="text-gray-700 hover:text-blue-600 font-medium">Le vélo</a>
+                    <a href="#eligibilite" class="text-gray-700 hover:text-blue-600 font-medium">Éligibilité</a>
+                    <a href="#faq" class="text-gray-700 hover:text-blue-600 font-medium">FAQ</a>
+                </div>
+                <div>
+                    <button onclick="scrollToForm()" class="btn-primary text-white px-6 py-3 rounded-lg font-semibold">
+                        Vérifier mon éligibilité →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="bg-white text-blue-600 px-4 py-2 rounded-full inline-block mb-6 font-medium">
+                        Dispositif VéloCEE
+                    </div>
+                    <h1 class="text-5xl font-bold mb-6 leading-tight">
+                        Votre Vélo électrique Professionnel<br>
+                        <span class="text-green-400">100 % financé par le dispositif CEE</span>
+                    </h1>
+                    <p class="text-xl mb-8 opacity-90">
+                        Équipez votre <strong>TPE/PME</strong> ou association sans avancer 1 €. Le mécanisme officiel des 
+                        <strong>Certificats d'Économies d'Énergie (CEE)</strong> couvre l'intégralité du coût.
+                    </p>
+                    
+                    <div class="bg-yellow-500 text-black px-4 py-2 rounded-lg inline-block mb-8">
+                        ⚠️ Les particuliers ne sont pas éligibles.
+                    </div>
+
+                    <div class="flex flex-wrap gap-4 mb-8">
+                        <div class="bg-white bg-opacity-20 px-4 py-2 rounded-lg">
+                            <strong>Reste à charge : 0 €</strong>
+                        </div>
+                        <div class="bg-white bg-opacity-20 px-4 py-2 rounded-lg">
+                            <strong>Éligible partout en France & DOM-TOM</strong>
+                        </div>
+                        <div class="bg-white bg-opacity-20 px-4 py-2 rounded-lg">
+                            <strong>Procédure encadrée</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button onclick="scrollToForm()" class="btn-primary text-white px-8 py-4 rounded-lg font-semibold text-lg">
+                            Vérifier mon éligibilité →
+                        </button>
+                        <button onclick="scrollToInfo()" class="btn-secondary text-white px-8 py-4 rounded-lg font-semibold text-lg">
+                            Comment ça marche
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <img src="https://page.gensparksite.com/v1/base64_upload/36aff545c049db122796cc2036f56efd" alt="Vélo électrique professionnel" class="w-full max-w-lg mx-auto rounded-lg shadow-2xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Programme officiel -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8">Avec l'écosystème officiel de la transition énergétique</h2>
+            
+            <div class="flex justify-center items-center mb-8">
+                <img src="http://voelio.info/wp-content/uploads/2025/08/logos-programme-velo-480x95-1.png" alt="Logos programme vélo" class="max-w-full h-auto">
+            </div>
+            
+            <div class="flex justify-center items-center space-x-8 text-gray-600">
+                <div class="flex items-center">
+                    <span class="text-green-600 text-2xl font-bold">+1 200</span>
+                    <span class="ml-2">structures déjà équipées</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <span class="ml-2">4,9/5 (312 avis)</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Avantages -->
+    <section id="dispositif" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold text-gray-900 mb-8">Réduisez vos dépenses & gagnez en agilité</h2>
+                    <p class="text-xl text-gray-600 mb-8">
+                        Carburant, stationnement, maintenance d'utilitaires, ZFE : vos coûts augmentent et vos déplacements se compliquent.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 text-xl mt-1 mr-4"></i>
+                            <p class="text-lg">0 € d'investissement, actif productif pour votre structure</p>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 text-xl mt-1 mr-4"></i>
+                            <p class="text-lg">Livraison des vélos gratuite directement dans vos locaux.</p>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 text-xl mt-1 mr-4"></i>
+                            <p class="text-lg">Jusqu'à 3 000 € d'économies annuelles sur carburant, stationnement et entretien.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-blue-50 p-8 rounded-xl">
+                    <h3 class="text-2xl font-bold text-blue-900 mb-4 flex items-center">
+                        <i class="fas fa-lightbulb text-yellow-500 mr-3"></i>
+                        Pourquoi c'est 100 % financé ?
+                    </h3>
+                    <p class="text-gray-700 mb-4">
+                        Le dispositif est financé par les <strong>Certificats d'Économies d'Énergie (CEE)</strong> : 
+                        les fournisseurs d'énergie contribuent au financement d'équipements propres. 
+                        Votre structure bénéficie ainsi d'un vélo-cargo électrique <strong>sans reste à charge</strong>.
+                    </p>
+                    <p class="text-gray-700">
+                        Si vous êtes éligible, nous gérons le reste (constitution et dépôt du dossier, traçabilité, conformité).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Urgence -->
+    <section class="py-16 bg-blue-900 text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold mb-6">Déposez votre dossier pendant que le dispositif est ouvert</h2>
+            <p class="text-xl mb-8 opacity-90">
+                Les demandes sont traitées dans la limite de l'enveloppe nationale CEE, avec une clôture estimée au <strong>15 octobre 2025</strong>.
+            </p>
+            <button onclick="scrollToForm()" class="btn-primary text-white px-8 py-4 rounded-lg font-semibold text-lg">
+                Vérifier mon éligibilité maintenant →
+            </button>
+        </div>
+    </section>
+
+    <!-- Éligibilité -->
+    <section id="eligibilite" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">Qui peut en bénéficier ?</h2>
+            <p class="text-xl text-center text-gray-600 mb-12">
+                Le dispositif est ouvert à <strong>toute personne morale</strong> disposant d'un SIRET en France : 
+                TPE/PME, indépendants, associations, collectivités.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="card bg-white p-6 rounded-xl text-center">
+                    <i class="fas fa-store text-blue-600 text-3xl mb-4"></i>
+                    <h3 class="font-bold mb-2">TPE/PME, artisans & commerces</h3>
+                    <p class="text-gray-600">de proximité</p>
+                </div>
+                
+                <div class="card bg-white p-6 rounded-xl text-center">
+                    <i class="fas fa-user-tie text-green-600 text-3xl mb-4"></i>
+                    <h3 class="font-bold mb-2">Indépendants / micro-entrepreneurs</h3>
+                    <p class="text-gray-600">interventions, maintenance, SAV</p>
+                </div>
+                
+                <div class="card bg-white p-6 rounded-xl text-center">
+                    <i class="fas fa-hands-helping text-purple-600 text-3xl mb-4"></i>
+                    <h3 class="font-bold mb-2">Associations</h3>
+                    <p class="text-gray-600">aide alimentaire, médiation culturelle, soins à domicile</p>
+                </div>
+                
+                <div class="card bg-white p-6 rounded-xl text-center">
+                    <i class="fas fa-city text-red-600 text-3xl mb-4"></i>
+                    <h3 class="font-bold mb-2">Collectivités</h3>
+                    <p class="text-gray-600">services techniques, régies, bibliothèques</p>
+                </div>
+                
+                <div class="card bg-white p-6 rounded-xl text-center">
+                    <i class="fas fa-shipping-fast text-yellow-600 text-3xl mb-4"></i>
+                    <h3 class="font-bold mb-2">Livraison du dernier kilomètre</h3>
+                    <p class="text-gray-600">messagerie urbaine</p>
+                </div>
+                
+                <div class="card bg-white p-6 rounded-xl text-center">
+                    <i class="fas fa-heart text-pink-600 text-3xl mb-4"></i>
+                    <h3 class="font-bold mb-2">Services à la personne</h3>
+                    <p class="text-gray-600">santé à domicile</p>
+                </div>
+                
+                <div class="card bg-white p-6 rounded-xl text-center">
+                    <i class="fas fa-hard-hat text-orange-600 text-3xl mb-4"></i>
+                    <h3 class="font-bold mb-2">BTP léger / second œuvre</h3>
+                    <p class="text-gray-600">déplacements & outillage</p>
+                </div>
+                
+                <div class="card bg-white p-6 rounded-xl text-center">
+                    <i class="fas fa-utensils text-indigo-600 text-3xl mb-4"></i>
+                    <h3 class="font-bold mb-2">Restauration & traiteurs</h3>
+                    <p class="text-gray-600">courses, catering, tournées</p>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <div class="flex flex-wrap justify-center gap-4 mb-8">
+                    <div class="bg-green-100 text-green-800 px-4 py-2 rounded-lg font-semibold">
+                        Reste à charge : 0 €
+                    </div>
+                    <div class="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-semibold">
+                        Éligible partout en France & DOM-TOM
+                    </div>
+                    <div class="bg-purple-100 text-purple-800 px-4 py-2 rounded-lg font-semibold">
+                        Procédure encadrée
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Procédure -->
+    <section id="info" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">Une procédure simple pour obtenir votre vélo</h2>
+            <p class="text-xl text-center text-gray-600 mb-12">
+                Le dispositif est ouvert à <strong>toute personne morale</strong> disposant d'un SIRET en France : TPE/PME, indépendants, associations, collectivités.
+            </p>
+            <p class="text-center text-gray-600 mb-12">
+                Structures < 10 salariés = <strong>parcours allégé</strong>.<br>
+                Les particuliers ne sont pas éligibles.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="step-indicator w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
+                        1
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <i class="fas fa-clipboard-check text-blue-600 text-4xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-4">Test d'éligibilité (2 min)</h3>
+                        <p class="text-gray-600">
+                            Remplissez le formulaire ci-dessous. Un conseiller vérifie votre éligibilité et prépare le devis à 0 €.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <div class="step-indicator w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
+                        2
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <i class="fas fa-signature text-green-600 text-4xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-4">Signature électronique</h3>
+                        <p class="text-gray-600">
+                            Vous recevez un devis affichant 0 € de reste à charge. Signez en ligne : votre dossier est lancé.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <div class="step-indicator w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
+                        3
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <i class="fas fa-truck text-purple-600 text-4xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-4">Livraison</h3>
+                        <p class="text-gray-600">
+                            Votre vélo-cargo pro neuf est attribué et livré selon le planning d'approvisionnement.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-6 mt-12 rounded-r-lg">
+                <h4 class="font-bold text-yellow-800 mb-2">
+                    <i class="fas fa-lightbulb mr-2"></i>Astuce flotte :
+                </h4>
+                <p class="text-yellow-700">
+                    pour optimiser vos chances d'acceptation et accélérer le traitement, privilégiez une demande correspondant à 
+                    70–80 % de vos effectifs (ex. : 7 à 8 vélos pour 10 employés). Cela garantit un usage régulier et conforme aux critères du dispositif.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vélo -->
+    <section id="velo" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold text-gray-900 mb-8">
+                        Votre vélo-cargo professionnel financé par le dispositif CEE
+                    </h2>
+                    <p class="text-xl text-gray-600 mb-8">
+                        Conçu pour les professionnels exigeants : robustesse, performance et fiabilité réunies dans un vélo-cargo 
+                        100 % financé par le dispositif CEE.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 text-xl mt-1 mr-4"></i>
+                            <p class="text-lg">Assistance électrique haute performance</p>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 text-xl mt-1 mr-4"></i>
+                            <p class="text-lg">Capacité de charge jusqu'à 100kg</p>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 text-xl mt-1 mr-4"></i>
+                            <p class="text-lg">Autonomie jusqu'à 80km</p>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 text-xl mt-1 mr-4"></i>
+                            <p class="text-lg">Garantie constructeur 2 ans</p>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 text-xl mt-1 mr-4"></i>
+                            <p class="text-lg">Antivol haute sécurité inclus</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <img src="https://page.gensparksite.com/v1/base64_upload/af03f6dec33eb1290af65e465d0ca001" alt="Cycliste professionnel" class="w-full max-w-lg mx-auto rounded-lg shadow-2xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Formulaire d'éligibilité -->
+    <section id="formulaire" class="py-20 bg-gray-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-900 mb-6">Testez votre éligibilité en 2 minutes</h2>
+                <p class="text-xl text-gray-600 mb-4">
+                    Remplissez notre assistant pour confirmer votre droit au financement intégral et lancer votre projet sans attendre.
+                </p>
+                <div class="flex items-center justify-center space-x-4 text-gray-500">
+                    <i class="fas fa-lock"></i>
+                    <span>Formulaire sécurisé</span>
+                    <span>•</span>
+                    <span>Réponse sous 24h</span>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-xl p-8">
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Assistant d'éligibilité</h3>
+                    
+                    <!-- Progress Bar -->
+                    <div class="bg-gray-200 rounded-full h-2 mb-6">
+                        <div id="progressBar" class="progress-bar w-1/2 rounded-full"></div>
+                    </div>
+                    
+                    <div class="flex justify-between text-sm text-gray-600 mb-8">
+                        <span id="stepIndicator">Étape 1 sur 2</span>
+                        <span>🔒 Données sécurisées</span>
+                    </div>
+                </div>
+                
+                <form id="eligibilityForm">
+                    <!-- Étape 1 -->
+                    <div id="step1" class="form-step active">
+                        <h4 class="text-xl font-bold text-gray-900 mb-6">1️⃣ Votre structure</h4>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                SIRET ou nom de l'entreprise *
+                            </label>
+                            <input type="text" id="siret" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
+                                   placeholder="Saisissez 14 chiffres pour un SIRET ou au moins 3 caractères pour rechercher par nom">
+                            <div id="siretError" class="error-message"></div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Type d'organisme *
+                            </label>
+                            <select id="typeOrganisme" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                <option value="">Sélectionnez votre type d'organisme</option>
+                                <option value="entreprise">Entreprise</option>
+                                <option value="association">Association</option>
+                                <option value="collectivite">Collectivité</option>
+                                <option value="auto-entrepreneur">Auto-entrepreneur</option>
+                                <option value="artisan">Artisan</option>
+                                <option value="commerce">Commerce</option>
+                                <option value="autre">Autre</option>
+                            </select>
+                            <div id="typeError" class="error-message"></div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Raison sociale
+                            </label>
+                            <input type="text" id="raisonSociale" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
+                                   placeholder="Nom de votre entreprise/association">
+                        </div>
+                        
+                        <div class="mb-8">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Effectif *
+                            </label>
+                            <input type="number" id="effectif" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
+                                   placeholder="Nombre de salariés" min="1">
+                            <p class="text-sm text-gray-500 mt-1">Plafond vélos = 1 par salarié.</p>
+                            <div id="effectifError" class="error-message"></div>
+                        </div>
+                        
+                        <button type="button" id="nextStep" class="w-full btn-primary text-white py-4 rounded-lg font-semibold text-lg">
+                            Suivant →
+                        </button>
+                    </div>
+                    
+                    <!-- Étape 2 -->
+                    <div id="step2" class="form-step">
+                        <h4 class="text-xl font-bold text-gray-900 mb-6">2️⃣ Vos coordonnées</h4>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Prénom *
+                                </label>
+                                <input type="text" id="prenom" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
+                                       placeholder="Votre prénom">
+                                <div id="prenomError" class="error-message"></div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Nom *
+                                </label>
+                                <input type="text" id="nom" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
+                                       placeholder="Votre nom">
+                                <div id="nomError" class="error-message"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Email *
+                            </label>
+                            <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
+                                   placeholder="votre@email.com">
+                            <div id="emailError" class="error-message"></div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Téléphone
+                            </label>
+                            <input type="tel" id="telephone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
+                                   placeholder="06 12 34 56 78">
+                        </div>
+                        
+                        <div class="mb-8">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                KBIS/SIREN (obligatoire) *
+                            </label>
+                            <div class="file-upload-area" id="fileUploadArea">
+                                <input type="file" id="document" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" class="hidden">
+                                <div id="uploadContent">
+                                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+                                    <p class="text-lg font-medium text-gray-700 mb-2">Glissez votre document ici ou cliquez pour sélectionner</p>
+                                    <p class="text-sm text-gray-500">KBIS pour entreprises, justificatif SIREN pour associations</p>
+                                    <p class="text-sm text-gray-500">Formats acceptés : PDF, JPG, PNG, DOC (max 10MB)</p>
+                                </div>
+                                <div id="fileSelected" class="hidden">
+                                    <i class="fas fa-file-alt text-4xl text-green-500 mb-4"></i>
+                                    <p id="fileName" class="text-lg font-medium text-gray-700"></p>
+                                    <button type="button" id="removeFile" class="text-red-500 hover:text-red-700 mt-2">
+                                        <i class="fas fa-trash mr-1"></i> Supprimer
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="documentError" class="error-message"></div>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button type="button" id="prevStep" class="flex-1 bg-gray-300 text-gray-700 py-4 rounded-lg font-semibold text-lg hover:bg-gray-400">
+                                ← Précédent
+                            </button>
+                            <button type="submit" id="submitBtn" class="flex-1 btn-primary text-white py-4 rounded-lg font-semibold text-lg">
+                                Envoyer ma demande
+                            </button>
+                        </div>
+                        
+                        <div id="submitError" class="error-message mt-4 text-center"></div>
+                        <div id="submitSuccess" class="success-message mt-4 text-center"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">Foire aux questions</h2>
+            
+            <div class="space-y-6">
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">"100 % financé"… Où est le piège ?</h3>
+                    <p class="text-gray-700">
+                        Il n'y a pas de piège : la prise en charge provient du dispositif public des CEE. Les fournisseurs d'énergie 
+                        financent ces équipements en échange de certificats. Vous signez un devis à 0 € et restez propriétaire du vélo-cargo 
+                        (neuf ou reconditionné), sous réserve d'éligibilité et de conformité.
+                    </p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Quelles structures sont éligibles ?</h3>
+                    <p class="text-gray-700">
+                        Toutes les personnes morales : entreprises (y compris auto-entrepreneurs), associations, collectivités. 
+                        Les particuliers ne sont pas éligibles.
+                    </p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">On va me noyer dans la paperasse ?</h3>
+                    <p class="text-gray-700">
+                        Non. Notre équipe gère 100 % des démarches (constitution, dépôt, suivi). Les TPE < 10 salariés ont un parcours allégé.
+                    </p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Quel type de vélo-cargo est financé ?</h3>
+                    <p class="text-gray-700">
+                        Vélos-cargos professionnels adaptés à un usage intensif, avec garantie. Options d'assistance électrique selon l'activité, 
+                        antivol haute sécurité et enregistrement FNUCI inclus.
+                    </p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Délais et disponibilité ?</h3>
+                    <p class="text-gray-700">
+                        Forte demande : réservez votre place. Nous planifions la mise à disposition et priorisons les dossiers complets.
+                    </p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Peut-on demander plusieurs vélos ?</h3>
+                    <p class="text-gray-700">
+                        Oui. Au-delà de 10 vélos, une attestation sur l'honneur motivant le besoin est demandée. 
+                        En pratique, on équipe souvent 7–8 collaborateurs pour 10.
+                    </p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Qui doit signer ?</h3>
+                    <p class="text-gray-700">
+                        Un représentant habilité (gérant, président, direction commerciale/financière). La signature se fait électroniquement.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <img src="https://page.gensparksite.com/v1/base64_upload/b3b2a66eaf698b31511c5a63994e6548" alt="VéloCEE Mobilité" class="h-12 w-auto mx-auto mb-6">
+                <p class="text-gray-400 mb-6">
+                    Le financement provient des « obligés » (fournisseurs d'énergie) via le dispositif national CEE.<br>
+                    Offre sous réserve d'éligibilité et disponibilités du programme.
+                </p>
+                <div class="flex justify-center space-x-8">
+                    <a href="#dispositif" class="text-gray-400 hover:text-white">Le dispositif</a>
+                    <a href="#velo" class="text-gray-400 hover:text-white">Le vélo</a>
+                    <a href="#eligibilite" class="text-gray-400 hover:text-white">Éligibilité</a>
+                    <a href="#faq" class="text-gray-400 hover:text-white">FAQ</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="admin-panel">
+        <div class="admin-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Backoffice VéloCEE Mobilité</h2>
+                <button onclick="closeAdmin()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                    <i class="fas fa-times"></i> Fermer
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-blue-100 p-4 rounded-lg text-center">
+                    <h3 class="font-bold text-blue-800">Total Prospects</h3>
+                    <p id="totalProspects" class="text-2xl font-bold text-blue-600">0</p>
+                </div>
+                <div class="bg-green-100 p-4 rounded-lg text-center">
+                    <h3 class="font-bold text-green-800">Avec Documents</h3>
+                    <p id="withDocuments" class="text-2xl font-bold text-green-600">0</p>
+                </div>
+                <div class="bg-yellow-100 p-4 rounded-lg text-center">
+                    <h3 class="font-bold text-yellow-800">En Attente</h3>
+                    <p id="pendingReview" class="text-2xl font-bold text-yellow-600">0</p>
+                </div>
+            </div>
+            
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Liste des Prospects</h3>
+                <button onclick="exportData()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                    <i class="fas fa-download"></i> Exporter CSV
+                </button>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full bg-white border border-gray-300 rounded-lg">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left font-semibold">Date</th>
+                            <th class="px-4 py-3 text-left font-semibold">SIRET</th>
+                            <th class="px-4 py-3 text-left font-semibold">Raison Sociale</th>
+                            <th class="px-4 py-3 text-left font-semibold">Type</th>
+                            <th class="px-4 py-3 text-left font-semibold">Contact</th>
+                            <th class="px-4 py-3 text-left font-semibold">Effectif</th>
+                            <th class="px-4 py-3 text-left font-semibold">Document</th>
+                            <th class="px-4 py-3 text-left font-semibold">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="prospectsTable">
+                        <tr>
+                            <td colspan="8" class="text-center py-8 text-gray-500">
+                                Aucun prospect pour le moment
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Popup -->
+    <div id="loginPopup" class="hidden">
+        <div class="fixed inset-0 bg-black bg-opacity-50 z-1000"></div>
+        <div class="login-popup">
+            <h3 class="text-xl font-bold mb-4">Accès Administrateur</h3>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Mot de passe</label>
+                <input type="password" id="adminPassword" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                       placeholder="Entrez le mot de passe">
+                <div id="loginError" class="error-message"></div>
+            </div>
+            <div class="flex space-x-4">
+                <button onclick="login()" class="flex-1 bg-blue-500 text-white py-2 rounded-lg font-semibold hover:bg-blue-600">
+                    Se connecter
+                </button>
+                <button onclick="closeLogin()" class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg font-semibold hover:bg-gray-400">
+                    Annuler
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentStep = 1;
+        let formData = {};
+        let uploadedFile = null;
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeForm();
+            checkAdminAccess();
+        });
+
+        // Gestion du formulaire
+        function initializeForm() {
+            const nextBtn = document.getElementById('nextStep');
+            const prevBtn = document.getElementById('prevStep');
+            const submitBtn = document.getElementById('submitBtn');
+            const form = document.getElementById('eligibilityForm');
+
+            // Écouteurs d'événements
+            nextBtn.addEventListener('click', nextStep);
+            prevBtn.addEventListener('click', prevStep);
+            form.addEventListener('submit', submitForm);
+            
+            // Upload de fichier
+            setupFileUpload();
+            
+            // Validation en temps réel
+            setupRealTimeValidation();
+        }
+
+        function setupRealTimeValidation() {
+            const fields = ['siret', 'typeOrganisme', 'effectif', 'prenom', 'nom', 'email'];
+            fields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.addEventListener('input', validateField);
+                    field.addEventListener('change', validateField);
+                }
+            });
+        }
+
+        function validateField(event) {
+            const field = event.target;
+            const fieldId = field.id;
+            const value = field.value.trim();
+            const errorElement = document.getElementById(fieldId + 'Error');
+            
+            // Effacer l'erreur précédente
+            if (errorElement) {
+                errorElement.textContent = '';
+            }
+
+            // Validation basique
+            if (field.hasAttribute('required') || field.parentElement.querySelector('label').textContent.includes('*')) {
+                if (!value) {
+                    if (errorElement) {
+                        errorElement.textContent = 'Ce champ est obligatoire';
+                    }
+                    return false;
+                }
+            }
+
+            // Validations spécifiques
+            if (fieldId === 'email' && value) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(value)) {
+                    if (errorElement) {
+                        errorElement.textContent = 'Format d\'email invalide';
+                    }
+                    return false;
+                }
+            }
+
+            if (fieldId === 'siret' && value) {
+                if (value.length < 3) {
+                    if (errorElement) {
+                        errorElement.textContent = 'Minimum 3 caractères';
+                    }
+                    return false;
+                }
+            }
+
+            if (fieldId === 'effectif' && value) {
+                const effectif = parseInt(value);
+                if (effectif < 1 || effectif > 1000) {
+                    if (errorElement) {
+                        errorElement.textContent = 'Effectif doit être entre 1 et 1000';
+                    }
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        function setupFileUpload() {
+            const fileUploadArea = document.getElementById('fileUploadArea');
+            const fileInput = document.getElementById('document');
+            const uploadContent = document.getElementById('uploadContent');
+            const fileSelected = document.getElementById('fileSelected');
+            const fileName = document.getElementById('fileName');
+            const removeFileBtn = document.getElementById('removeFile');
+
+            // Click pour sélectionner
+            fileUploadArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            // Drag & Drop
+            fileUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                fileUploadArea.classList.add('dragover');
+            });
+
+            fileUploadArea.addEventListener('dragleave', () => {
+                fileUploadArea.classList.remove('dragover');
+            });
+
+            fileUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                fileUploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFileSelection(files[0]);
+                }
+            });
+
+            // Sélection de fichier
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFileSelection(e.target.files[0]);
+                }
+            });
+
+            // Supprimer fichier
+            removeFileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                uploadedFile = null;
+                fileInput.value = '';
+                uploadContent.classList.remove('hidden');
+                fileSelected.classList.add('hidden');
+                document.getElementById('documentError').textContent = '';
+            });
+        }
+
+        function handleFileSelection(file) {
+            // Vérification du type de fichier
+            const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+            if (!allowedTypes.includes(file.type)) {
+                document.getElementById('documentError').textContent = 'Type de fichier non supporté. Utilisez PDF, JPG, PNG ou DOC.';
+                return;
+            }
+
+            // Vérification de la taille (10MB max)
+            if (file.size > 10 * 1024 * 1024) {
+                document.getElementById('documentError').textContent = 'Le fichier est trop volumineux (maximum 10MB).';
+                return;
+            }
+
+            // Stocker le fichier
+            uploadedFile = file;
+            
+            // Afficher le fichier sélectionné
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('uploadContent').classList.add('hidden');
+            document.getElementById('fileSelected').classList.remove('hidden');
+            document.getElementById('documentError').textContent = '';
+
+            console.log('Fichier sélectionné:', file.name, file.type, file.size);
+        }
+
+        function nextStep() {
+            console.log('Passage à l\'étape suivante...');
+            
+            // Validation de l'étape 1
+            const siret = document.getElementById('siret').value.trim();
+            const typeOrganisme = document.getElementById('typeOrganisme').value;
+            const effectif = document.getElementById('effectif').value.trim();
+
+            let isValid = true;
+
+            // Vérification SIRET
+            if (!siret) {
+                document.getElementById('siretError').textContent = 'Ce champ est obligatoire';
+                isValid = false;
+            } else {
+                document.getElementById('siretError').textContent = '';
+            }
+
+            // Vérification type d'organisme
+            if (!typeOrganisme) {
+                document.getElementById('typeError').textContent = 'Veuillez sélectionner un type d\'organisme';
+                isValid = false;
+            } else {
+                document.getElementById('typeError').textContent = '';
+            }
+
+            // Vérification effectif
+            if (!effectif || parseInt(effectif) < 1) {
+                document.getElementById('effectifError').textContent = 'Veuillez indiquer un effectif valide';
+                isValid = false;
+            } else {
+                document.getElementById('effectifError').textContent = '';
+            }
+
+            if (!isValid) {
+                console.log('Validation échouée pour l\'étape 1');
+                return;
+            }
+
+            // Passer à l'étape 2
+            document.getElementById('step1').classList.remove('active');
+            document.getElementById('step2').classList.add('active');
+            document.getElementById('stepIndicator').textContent = 'Étape 2 sur 2';
+            document.getElementById('progressBar').style.width = '100%';
+            currentStep = 2;
+
+            console.log('Passage à l\'étape 2 réussi');
+        }
+
+        function prevStep() {
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step1').classList.add('active');
+            document.getElementById('stepIndicator').textContent = 'Étape 1 sur 2';
+            document.getElementById('progressBar').style.width = '50%';
+            currentStep = 1;
+        }
+
+        function submitForm(event) {
+            event.preventDefault();
+            console.log('Soumission du formulaire...');
+
+            // Effacer les messages précédents
+            document.getElementById('submitError').textContent = '';
+            document.getElementById('submitSuccess').textContent = '';
+
+            // Validation complète
+            const isValid = validateCompleteForm();
+            
+            if (!isValid) {
+                console.log('Validation du formulaire échouée');
+                return;
+            }
+
+            // Collecter toutes les données
+            const formData = {
+                timestamp: new Date().toISOString(),
+                siret: document.getElementById('siret').value.trim(),
+                typeOrganisme: document.getElementById('typeOrganisme').value,
+                raisonSociale: document.getElementById('raisonSociale').value.trim(),
+                effectif: parseInt(document.getElementById('effectif').value),
+                prenom: document.getElementById('prenom').value.trim(),
+                nom: document.getElementById('nom').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                telephone: document.getElementById('telephone').value.trim(),
+                hasDocument: uploadedFile !== null,
+                documentName: uploadedFile ? uploadedFile.name : '',
+                documentType: uploadedFile ? uploadedFile.type : '',
+                documentSize: uploadedFile ? uploadedFile.size : 0
+            };
+
+            console.log('Données du formulaire:', formData);
+
+            // Sauvegarder en localStorage
+            saveFormData(formData);
+
+            // Afficher le message de succès
+            document.getElementById('submitSuccess').innerHTML = `
+                <i class="fas fa-check-circle mr-2"></i>
+                Votre demande a été envoyée avec succès ! Vous recevrez une réponse sous 24h.
+            `;
+
+            // Réinitialiser le formulaire après 3 secondes
+            setTimeout(() => {
+                resetForm();
+            }, 3000);
+        }
+
+        function validateCompleteForm() {
+            console.log('Validation complète du formulaire...');
+            let isValid = true;
+
+            // Étape 1
+            const siret = document.getElementById('siret').value.trim();
+            const typeOrganisme = document.getElementById('typeOrganisme').value;
+            const effectif = document.getElementById('effectif').value.trim();
+
+            // Étape 2
+            const prenom = document.getElementById('prenom').value.trim();
+            const nom = document.getElementById('nom').value.trim();
+            const email = document.getElementById('email').value.trim();
+
+            // Vérifications basiques avec logs
+            if (!siret) {
+                console.log('SIRET manquant');
+                document.getElementById('submitError').textContent = 'Le SIRET/nom d\'entreprise est obligatoire';
+                isValid = false;
+            }
+
+            if (!typeOrganisme) {
+                console.log('Type d\'organisme manquant');
+                document.getElementById('submitError').textContent = 'Le type d\'organisme est obligatoire';
+                isValid = false;
+            }
+
+            if (!effectif || parseInt(effectif) < 1) {
+                console.log('Effectif invalide:', effectif);
+                document.getElementById('submitError').textContent = 'L\'effectif est obligatoire';
+                isValid = false;
+            }
+
+            if (!prenom) {
+                console.log('Prénom manquant');
+                document.getElementById('submitError').textContent = 'Le prénom est obligatoire';
+                isValid = false;
+            }
+
+            if (!nom) {
+                console.log('Nom manquant');
+                document.getElementById('submitError').textContent = 'Le nom est obligatoire';
+                isValid = false;
+            }
+
+            if (!email) {
+                console.log('Email manquant');
+                document.getElementById('submitError').textContent = 'L\'email est obligatoire';
+                isValid = false;
+            } else {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    console.log('Email invalide:', email);
+                    document.getElementById('submitError').textContent = 'Format d\'email invalide';
+                    isValid = false;
+                }
+            }
+
+            // Vérification du document
+            if (!uploadedFile) {
+                console.log('Document manquant');
+                document.getElementById('submitError').textContent = 'Le document KBIS/SIREN est obligatoire';
+                isValid = false;
+            }
+
+            console.log('Validation complète:', isValid ? 'SUCCÈS' : 'ÉCHEC');
+            console.log('Détails validation:', {
+                siret: !!siret,
+                typeOrganisme: !!typeOrganisme,
+                effectif: !!effectif && parseInt(effectif) > 0,
+                prenom: !!prenom,
+                nom: !!nom,
+                email: !!email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+                document: !!uploadedFile
+            });
+
+            return isValid;
+        }
+
+        function saveFormData(data) {
+            try {
+                // Récupérer les données existantes
+                let prospects = JSON.parse(localStorage.getItem('prospects') || '[]');
+                
+                // Ajouter les nouvelles données
+                prospects.push(data);
+                
+                // Sauvegarder
+                localStorage.setItem('prospects', JSON.stringify(prospects));
+                
+                // Sauvegarder le fichier si présent
+                if (uploadedFile) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const fileData = {
+                            id: data.timestamp,
+                            name: uploadedFile.name,
+                            type: uploadedFile.type,
+                            size: uploadedFile.size,
+                            data: e.target.result
+                        };
+                        
+                        let files = JSON.parse(localStorage.getItem('prospect_files') || '[]');
+                        files.push(fileData);
+                        localStorage.setItem('prospect_files', JSON.stringify(files));
+                    };
+                    reader.readAsDataURL(uploadedFile);
+                }
+                
+                console.log('Données sauvegardées avec succès');
+            } catch (error) {
+                console.error('Erreur lors de la sauvegarde:', error);
+            }
+        }
+
+        function resetForm() {
+            // Réinitialiser le formulaire
+            document.getElementById('eligibilityForm').reset();
+            
+            // Remettre à l'étape 1
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step1').classList.add('active');
+            document.getElementById('stepIndicator').textContent = 'Étape 1 sur 2';
+            document.getElementById('progressBar').style.width = '50%';
+            currentStep = 1;
+            
+            // Effacer les messages
+            document.querySelectorAll('.error-message, .success-message').forEach(el => {
+                el.textContent = '';
+            });
+            
+            // Réinitialiser l'upload
+            uploadedFile = null;
+            document.getElementById('uploadContent').classList.remove('hidden');
+            document.getElementById('fileSelected').classList.add('hidden');
+        }
+
+        // Fonctions utilitaires
+        function scrollToForm() {
+            document.getElementById('formulaire').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        function scrollToInfo() {
+            document.getElementById('info').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Gestion de l'admin
+        function checkAdminAccess() {
+            if (window.location.hash === '#admin') {
+                showLogin();
+            }
+        }
+
+        function showLogin() {
+            document.getElementById('loginPopup').classList.remove('hidden');
+            document.getElementById('adminPassword').focus();
+            
+            // Gérer l'entrée clavier
+            document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    login();
+                }
+            });
+        }
+
+        function closeLogin() {
+            document.getElementById('loginPopup').classList.add('hidden');
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('loginError').textContent = '';
+            window.location.hash = '';
+        }
+
+        function login() {
+            const password = document.getElementById('adminPassword').value;
+            
+            if (password === 'admin2024') {
+                closeLogin();
+                showAdmin();
+            } else {
+                document.getElementById('loginError').textContent = 'Mot de passe incorrect';
+            }
+        }
+
+        function showAdmin() {
+            document.getElementById('adminPanel').style.display = 'block';
+            loadProspects();
+        }
+
+        function closeAdmin() {
+            document.getElementById('adminPanel').style.display = 'none';
+            window.location.hash = '';
+        }
+
+        function loadProspects() {
+            try {
+                const prospects = JSON.parse(localStorage.getItem('prospects') || '[]');
+                const files = JSON.parse(localStorage.getItem('prospect_files') || '[]');
+                
+                // Statistiques
+                document.getElementById('totalProspects').textContent = prospects.length;
+                document.getElementById('withDocuments').textContent = prospects.filter(p => p.hasDocument).length;
+                document.getElementById('pendingReview').textContent = prospects.length;
+                
+                // Tableau
+                const tbody = document.getElementById('prospectsTable');
+                
+                if (prospects.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="8" class="text-center py-8 text-gray-500">
+                                Aucun prospect pour le moment
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                tbody.innerHTML = prospects.map((prospect, index) => {
+                    const date = new Date(prospect.timestamp).toLocaleDateString('fr-FR');
+                    const file = files.find(f => f.id === prospect.timestamp);
+                    
+                    return `
+                        <tr class="border-t">
+                            <td class="px-4 py-3">${date}</td>
+                            <td class="px-4 py-3">${prospect.siret}</td>
+                            <td class="px-4 py-3">${prospect.raisonSociale || '-'}</td>
+                            <td class="px-4 py-3">${prospect.typeOrganisme}</td>
+                            <td class="px-4 py-3">
+                                ${prospect.prenom} ${prospect.nom}<br>
+                                <small class="text-gray-500">${prospect.email}</small>
+                                ${prospect.telephone ? '<br><small class="text-gray-500">' + prospect.telephone + '</small>' : ''}
+                            </td>
+                            <td class="px-4 py-3">${prospect.effectif}</td>
+                            <td class="px-4 py-3">
+                                ${prospect.hasDocument ? 
+                                    `<span class="text-green-600"><i class="fas fa-check-circle"></i> ${prospect.documentName}</span>` :
+                                    '<span class="text-red-600"><i class="fas fa-times-circle"></i> Aucun</span>'
+                                }
+                            </td>
+                            <td class="px-4 py-3">
+                                ${file ? 
+                                    `<button onclick="downloadFile('${prospect.timestamp}')" class="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600">
+                                        <i class="fas fa-download"></i> Télécharger
+                                    </button>` :
+                                    '-'
+                                }
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                console.error('Erreur lors du chargement des prospects:', error);
+            }
+        }
+
+        function downloadFile(timestamp) {
+            try {
+                const files = JSON.parse(localStorage.getItem('prospect_files') || '[]');
+                const file = files.find(f => f.id === timestamp);
+                
+                if (file) {
+                    const link = document.createElement('a');
+                    link.href = file.data;
+                    link.download = file.name;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            } catch (error) {
+                console.error('Erreur lors du téléchargement:', error);
+            }
+        }
+
+        function exportData() {
+            try {
+                const prospects = JSON.parse(localStorage.getItem('prospects') || '[]');
+                
+                if (prospects.length === 0) {
+                    alert('Aucune donnée à exporter');
+                    return;
+                }
+                
+                // Créer le CSV
+                const headers = ['Date', 'SIRET', 'Raison Sociale', 'Type Organisme', 'Prénom', 'Nom', 'Email', 'Téléphone', 'Effectif', 'Document'];
+                const csvContent = [
+                    headers.join(','),
+                    ...prospects.map(p => [
+                        new Date(p.timestamp).toLocaleDateString('fr-FR'),
+                        p.siret,
+                        p.raisonSociale || '',
+                        p.typeOrganisme,
+                        p.prenom,
+                        p.nom,
+                        p.email,
+                        p.telephone || '',
+                        p.effectif,
+                        p.documentName || ''
+                    ].map(field => `"${field}"`).join(','))
+                ].join('\n');
+                
+                // Télécharger
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `prospects_velocee_${new Date().toISOString().split('T')[0]}.csv`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+            } catch (error) {
+                console.error('Erreur lors de l\'export:', error);
+            }
+        }
+
+        // Gestion des liens hash
+        window.addEventListener('hashchange', function() {
+            if (window.location.hash === '#admin') {
+                showLogin();
+            }
+        });
+    </script>
+</body>
+</html>
+    <script id="html_badge_script1">
+        window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDlpikllQ6wnHJ551WcxI4MxMTeT31P9gunh5z8lf8dg3JJGfKo67TevS2rX%2FylV9NY5XZpI0P1I9xelMfiZFQqU%2BTKLh5hCEYm%2BiqSPQK%2B%2BLi0si0nmH7M0J6UUy1cABdx9K0CwyXwbwNblkvz2kGls67GNMoL9WJ6rstK0sWahAPWLi63KRHpJ%2B8WO%2FaoHojj8b93zLDa82W52arigQfrD4nLdI9aV3vRFydLAhBJArNmWoomEgbuZ8kREIhbBQubBflgha93qTnP8szoj2WOkpzOcBt%2FudIDyVZzwFozpDIRULEqNbShAEqjx%2BoTTCnzCuT0%2B3btoBf30g39hfemodFX%2F%2BRELKhjypPKn%2BDlVqNogQax0N6NAg4CX5meRySY%2BJyWwDFqyKWmczMRuSf9Rb389qr2G7xYaXpRJ56wywtTbEJsHJlVo%2FlNAMhI35yXhrCcZPJzdMwehu8EWrO14A%2F7VJDH39Iq0TxsFh3EqRCBq9HEGATW3CaxTxLaRP%2B7UCwpCVoMQWjoFjjcCPwqU%3D";
+        window.__genspark_locale = "fr-FR";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDlpikllQ6wnHJ551WcxI4MxMTeT31P9gunh5z8lf8dg3JJGfKo67TevS2rX/ylV9NY5XZpI0P1I9xelMfiZFQqU+TKLh5hCEYm+iqSPQK++Li0si0nmH7M0J6UUy1cABdx9K0CwyXwbwNblkvz2kGls67GNMoL9WJ6rstK0sWahAPWLi63KRHpJ+8WO/aoHojj8b93zLDa82W52arigQfrD4nLdI9aV3vRFydLAhBJArNmWoomEgbuZ8kREIhbBQubBflgha93qTnP8szoj2WOkpzOcBt/udIDyVZzwFozpDIRULEqNbShAEqjx+oTTCnzCuT0+3btoBf30g39hfemodFX/+RELKhjypPKn+DlVqNogQax0N6NAg4CX5meRySY+JyWwDFqyKWmczMRuSf9Rb389qr2G7xYaXpRJ56wywtTbEJsHJlVo/lNAMhI35yXhrCcZPJzdMwehu8EWrO14A/7VJDH39Iq0TxsFh3EqRCBq9HEGATW3CaxTxLaRP+7UCwpCVoMQWjoFjjcCPwqU=";
+    </script>
+    
+    <script id="html_notice_dialog_script" src="https://www.genspark.ai/notice_dialog.js"></script>
+    
