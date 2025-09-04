@@ -47,36 +47,6 @@
         .form-step.active {
             display: block;
         }
-        .admin-panel {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
-        }
-        .admin-content {
-            background: white;
-            margin: 2% auto;
-            padding: 20px;
-            width: 95%;
-            height: 90%;
-            overflow-y: auto;
-            border-radius: 10px;
-        }
-        .login-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            z-index: 1001;
-        }
         .progress-bar {
             background: linear-gradient(90deg, #10b981 0%, #059669 100%);
             height: 6px;
@@ -97,11 +67,6 @@
         .file-upload-area.dragover {
             border-color: #10b981;
             background-color: #f0fdf4;
-        }
-        .btn-disabled {
-            background: #9ca3af !important;
-            cursor: not-allowed !important;
-            opacity: 0.6;
         }
         .error-message {
             color: #ef4444;
@@ -705,86 +670,6 @@
         </div>
     </footer>
 
-    <!-- Admin Panel -->
-    <div id="adminPanel" class="admin-panel">
-        <div class="admin-content">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold">Backoffice VéloCEE Mobilité</h2>
-                <button onclick="closeAdmin()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-                    <i class="fas fa-times"></i> Fermer
-                </button>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-blue-100 p-4 rounded-lg text-center">
-                    <h3 class="font-bold text-blue-800">Total Prospects</h3>
-                    <p id="totalProspects" class="text-2xl font-bold text-blue-600">0</p>
-                </div>
-                <div class="bg-green-100 p-4 rounded-lg text-center">
-                    <h3 class="font-bold text-green-800">Avec Documents</h3>
-                    <p id="withDocuments" class="text-2xl font-bold text-green-600">0</p>
-                </div>
-                <div class="bg-yellow-100 p-4 rounded-lg text-center">
-                    <h3 class="font-bold text-yellow-800">En Attente</h3>
-                    <p id="pendingReview" class="text-2xl font-bold text-yellow-600">0</p>
-                </div>
-            </div>
-            
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold">Liste des Prospects</h3>
-                <button onclick="exportData()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-                    <i class="fas fa-download"></i> Exporter CSV
-                </button>
-            </div>
-            
-            <div class="overflow-x-auto">
-                <table class="w-full bg-white border border-gray-300 rounded-lg">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-4 py-3 text-left font-semibold">Date</th>
-                            <th class="px-4 py-3 text-left font-semibold">SIRET</th>
-                            <th class="px-4 py-3 text-left font-semibold">Raison Sociale</th>
-                            <th class="px-4 py-3 text-left font-semibold">Type</th>
-                            <th class="px-4 py-3 text-left font-semibold">Contact</th>
-                            <th class="px-4 py-3 text-left font-semibold">Effectif</th>
-                            <th class="px-4 py-3 text-left font-semibold">Document</th>
-                            <th class="px-4 py-3 text-left font-semibold">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="prospectsTable">
-                        <tr>
-                            <td colspan="8" class="text-center py-8 text-gray-500">
-                                Aucun prospect pour le moment
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Login Popup -->
-    <div id="loginPopup" class="hidden">
-        <div class="fixed inset-0 bg-black bg-opacity-50 z-1000"></div>
-        <div class="login-popup">
-            <h3 class="text-xl font-bold mb-4">Accès Administrateur</h3>
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Mot de passe</label>
-                <input type="password" id="adminPassword" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                       placeholder="Entrez le mot de passe">
-                <div id="loginError" class="error-message"></div>
-            </div>
-            <div class="flex space-x-4">
-                <button onclick="login()" class="flex-1 bg-blue-500 text-white py-2 rounded-lg font-semibold hover:bg-blue-600">
-                    Se connecter
-                </button>
-                <button onclick="closeLogin()" class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg font-semibold hover:bg-gray-400">
-                    Annuler
-                </button>
-            </div>
-        </div>
-    </div>
-
     <script>
         // Variables globales
         let currentStep = 1;
@@ -794,7 +679,6 @@
         // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
             initializeForm();
-            checkAdminAccess();
         });
 
         // Gestion du formulaire
@@ -1049,7 +933,7 @@
 
             console.log('Données du formulaire:', formData);
 
-            // Sauvegarder en localStorage
+            // Envoyer à Formspree
             saveFormData(formData);
 
             // Afficher le message de succès
@@ -1130,55 +1014,48 @@
             }
 
             console.log('Validation complète:', isValid ? 'SUCCÈS' : 'ÉCHEC');
-            console.log('Détails validation:', {
-                siret: !!siret,
-                typeOrganisme: !!typeOrganisme,
-                effectif: !!effectif && parseInt(effectif) > 0,
-                prenom: !!prenom,
-                nom: !!nom,
-                email: !!email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
-                document: !!uploadedFile
-            });
-
             return isValid;
         }
 
         function saveFormData(data) {
             try {
-                // URL du webhook Google Apps Script
-                const webhookUrl = 'https://script.google.com/macros/s/AKfycbxDVG4xjcI2WGWxvauEtSDo47IeZ5mnjkeycarYs2Ysy7bpMok2Y1833jU46sRUXtnr/exec';
-                // Préparer les données à envoyer
-                const formData = new FormData();
+                // FORMSPREE - Solution simple qui marche !
+                const formspreeUrl = 'https://formspree.io/f/mwpnwnnr';
 
-                // Ajouter toutes les propriétés de data au FormData
-                for (const [key, value] of Object.entries(data)) {
-                    formData.append(key, value);
-                }
+                // Préparer les données pour Formspree
+                const formData = new FormData();
+                formData.append('siret', data.siret || '');
+                formData.append('typeOrganisme', data.typeOrganisme || '');
+                formData.append('raisonSociale', data.raisonSociale || '');
+                formData.append('effectif', data.effectif || '');
+                formData.append('prenom', data.prenom || '');
+                formData.append('nom', data.nom || '');
+                formData.append('telephone', data.telephone || '');
+                formData.append('email', data.email || '');
 
                 // Ajouter le fichier si présent
                 if (uploadedFile) {
-                    formData.append('file', uploadedFile);
+                    formData.append('document', uploadedFile, uploadedFile.name);
                 }
 
-                // Envoyer vers le webhook
-                fetch(webhookUrl, {
+                // Envoyer à Formspree
+                fetch(formspreeUrl, {
                     method: 'POST',
-                    body: formData
-                })
-                .then(response => {
-                    if (response.ok) {
-                        console.log('Données envoyées avec succès vers Google Apps Script');
-                    } else {
-                        console.error('Erreur lors de l\'envoi:', response.statusText);
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
                     }
                 })
+                .then(response => response.json())
+                .then(result => {
+                    console.log('Succès Formspree:', result);
+                })
                 .catch(error => {
-                    console.error('Erreur lors de l\'envoi vers le webhook:', error);
+                    console.error('Erreur Formspree:', error);
                 });
 
-                console.log('Données préparées pour envoi vers Google Apps Script');
             } catch (error) {
-                console.error('Erreur lors de la préparation des données:', error);
+                console.error('Erreur generale:', error);
             }
         }
 
@@ -1216,191 +1093,6 @@
                 behavior: 'smooth' 
             });
         }
-
-        // Gestion de l'admin
-        function checkAdminAccess() {
-            if (window.location.hash === '#admin') {
-                showLogin();
-            }
-        }
-
-        function showLogin() {
-            document.getElementById('loginPopup').classList.remove('hidden');
-            document.getElementById('adminPassword').focus();
-            
-            // Gérer l'entrée clavier
-            document.getElementById('adminPassword').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    login();
-                }
-            });
-        }
-
-        function closeLogin() {
-            document.getElementById('loginPopup').classList.add('hidden');
-            document.getElementById('adminPassword').value = '';
-            document.getElementById('loginError').textContent = '';
-            window.location.hash = '';
-        }
-
-        function login() {
-            const password = document.getElementById('adminPassword').value;
-            
-            if (password === 'admin2024') {
-                closeLogin();
-                showAdmin();
-            } else {
-                document.getElementById('loginError').textContent = 'Mot de passe incorrect';
-            }
-        }
-
-        function showAdmin() {
-            document.getElementById('adminPanel').style.display = 'block';
-            loadProspects();
-        }
-
-        function closeAdmin() {
-            document.getElementById('adminPanel').style.display = 'none';
-            window.location.hash = '';
-        }
-
-        function loadProspects() {
-            try {
-                const prospects = JSON.parse(localStorage.getItem('prospects') || '[]');
-                const files = JSON.parse(localStorage.getItem('prospect_files') || '[]');
-                
-                // Statistiques
-                document.getElementById('totalProspects').textContent = prospects.length;
-                document.getElementById('withDocuments').textContent = prospects.filter(p => p.hasDocument).length;
-                document.getElementById('pendingReview').textContent = prospects.length;
-                
-                // Tableau
-                const tbody = document.getElementById('prospectsTable');
-                
-                if (prospects.length === 0) {
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="8" class="text-center py-8 text-gray-500">
-                                Aucun prospect pour le moment
-                            </td>
-                        </tr>
-                    `;
-                    return;
-                }
-                
-                tbody.innerHTML = prospects.map((prospect, index) => {
-                    const date = new Date(prospect.timestamp).toLocaleDateString('fr-FR');
-                    const file = files.find(f => f.id === prospect.timestamp);
-                    
-                    return `
-                        <tr class="border-t">
-                            <td class="px-4 py-3">${date}</td>
-                            <td class="px-4 py-3">${prospect.siret}</td>
-                            <td class="px-4 py-3">${prospect.raisonSociale || '-'}</td>
-                            <td class="px-4 py-3">${prospect.typeOrganisme}</td>
-                            <td class="px-4 py-3">
-                                ${prospect.prenom} ${prospect.nom}<br>
-                                <small class="text-gray-500">${prospect.email}</small>
-                                ${prospect.telephone ? '<br><small class="text-gray-500">' + prospect.telephone + '</small>' : ''}
-                            </td>
-                            <td class="px-4 py-3">${prospect.effectif}</td>
-                            <td class="px-4 py-3">
-                                ${prospect.hasDocument ? 
-                                    `<span class="text-green-600"><i class="fas fa-check-circle"></i> ${prospect.documentName}</span>` :
-                                    '<span class="text-red-600"><i class="fas fa-times-circle"></i> Aucun</span>'
-                                }
-                            </td>
-                            <td class="px-4 py-3">
-                                ${file ? 
-                                    `<button onclick="downloadFile('${prospect.timestamp}')" class="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600">
-                                        <i class="fas fa-download"></i> Télécharger
-                                    </button>` :
-                                    '-'
-                                }
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
-                
-            } catch (error) {
-                console.error('Erreur lors du chargement des prospects:', error);
-            }
-        }
-
-        function downloadFile(timestamp) {
-            try {
-                const files = JSON.parse(localStorage.getItem('prospect_files') || '[]');
-                const file = files.find(f => f.id === timestamp);
-                
-                if (file) {
-                    const link = document.createElement('a');
-                    link.href = file.data;
-                    link.download = file.name;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                }
-            } catch (error) {
-                console.error('Erreur lors du téléchargement:', error);
-            }
-        }
-
-        function exportData() {
-            try {
-                const prospects = JSON.parse(localStorage.getItem('prospects') || '[]');
-                
-                if (prospects.length === 0) {
-                    alert('Aucune donnée à exporter');
-                    return;
-                }
-                
-                // Créer le CSV
-                const headers = ['Date', 'SIRET', 'Raison Sociale', 'Type Organisme', 'Prénom', 'Nom', 'Email', 'Téléphone', 'Effectif', 'Document'];
-                const csvContent = [
-                    headers.join(','),
-                    ...prospects.map(p => [
-                        new Date(p.timestamp).toLocaleDateString('fr-FR'),
-                        p.siret,
-                        p.raisonSociale || '',
-                        p.typeOrganisme,
-                        p.prenom,
-                        p.nom,
-                        p.email,
-                        p.telephone || '',
-                        p.effectif,
-                        p.documentName || ''
-                    ].map(field => `"${field}"`).join(','))
-                ].join('\n');
-                
-                // Télécharger
-                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = `prospects_velocee_${new Date().toISOString().split('T')[0]}.csv`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                
-            } catch (error) {
-                console.error('Erreur lors de l\'export:', error);
-            }
-        }
-
-        // Gestion des liens hash
-        window.addEventListener('hashchange', function() {
-            if (window.location.hash === '#admin') {
-                showLogin();
-            }
-        });
     </script>
 </body>
 </html>
-    <script id="html_badge_script1">
-        window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
-            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDt5QlTvWMew0GavWC%2BKO7k3eUdrNN4IuOS5oDJ%2FB9DNgw2PgvaEhImGm8bsCvKHPBOimsuL84cOomp0TfsGO8%2B7DOtGV8C4DCNRzEFInETqJhevmoJjW%2BjLR3s6g%2FJpRIaZEp43QEDMXrAyIRB0MYfnswb6lqyIH4zJhFo3e3zQH1Sk%2FHy22rskypXxAnssxHAlx049QAiZBgN0Aog6iRfP%2BLkV4j0NEuZjQ78Z94s4TzHhWamer4IXsjgPlaDT2F0chVRSFHD6ffCurAhHmPuNMq13sRsciM9909iAs2IBYGjv0jncPaIok5m8HxF62sFkN36C5mg5fLh5JV114vSGArZg7djmaHt6yy6Z2xeU1R%2FdQzzuaRpeoZDTvTPtL8JVs6rGQS74cD545bkksXbB6A05eJoqMPQr2wvimspI4CgwWSIWCSMDu4kcde6jImWYhjOPqjI1%2FN7GFVxXSW%2FnVsc7gvnSrh6yhrgu0Kh9ZqIHrRKxFbqNKDHu2ZSgyLD95dwRU1fm%2Fv89zlwxi8Zo%3D";
-        window.__genspark_locale = "fr-FR";
-        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDt5QlTvWMew0GavWC+KO7k3eUdrNN4IuOS5oDJ/B9DNgw2PgvaEhImGm8bsCvKHPBOimsuL84cOomp0TfsGO8+7DOtGV8C4DCNRzEFInETqJhevmoJjW+jLR3s6g/JpRIaZEp43QEDMXrAyIRB0MYfnswb6lqyIH4zJhFo3e3zQH1Sk/Hy22rskypXxAnssxHAlx049QAiZBgN0Aog6iRfP+LkV4j0NEuZjQ78Z94s4TzHhWamer4IXsjgPlaDT2F0chVRSFHD6ffCurAhHmPuNMq13sRsciM9909iAs2IBYGjv0jncPaIok5m8HxF62sFkN36C5mg5fLh5JV114vSGArZg7djmaHt6yy6Z2xeU1R/dQzzuaRpeoZDTvTPtL8JVs6rGQS74cD545bkksXbB6A05eJoqMPQr2wvimspI4CgwWSIWCSMDu4kcde6jImWYhjOPqjI1/N7GFVxXSW/nVsc7gvnSrh6yhrgu0Kh9ZqIHrRKxFbqNKDHu2ZSgyLD95dwRU1fm/v89zlwxi8Zo=";
-    </script>
-    
-    <script id="html_notice_dialog_script" src="https://www.genspark.ai/notice_dialog.js"></script>
-    
