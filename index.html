@@ -78,6 +78,9 @@
             font-size: 14px;
             margin-top: 5px;
         }
+        #googleFormIframe {
+            display: none;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -112,8 +115,8 @@
                         Dispositif VéloCEE
                     </div>
                     <h1 class="text-5xl font-bold mb-6 leading-tight">
-                        Votre Vélo électrique Professionnel<br>
-                        <span class="text-green-400">100 % financé par le dispositif CEE</span>
+                        Équipez votre <strong>TPE/PME</strong> ou association sans avancer 1 €<br>
+                        <span class="text-green-400">Le mécanisme officiel des CEE couvre l'intégralité du coût</span>
                     </h1>
                     <p class="text-xl mb-8 opacity-90">
                         Équipez votre <strong>TPE/PME</strong> ou association sans avancer 1 €. Le mécanisme officiel des 
@@ -166,16 +169,6 @@
                 <div class="flex items-center">
                     <span class="text-green-600 text-2xl font-bold">+1 200</span>
                     <span class="ml-2">structures déjà équipées</span>
-                </div>
-                <div class="flex items-center">
-                    <div class="flex text-yellow-400">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <span class="ml-2">4,9/5 (312 avis)</span>
                 </div>
             </div>
         </div>
@@ -402,10 +395,6 @@
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 text-xl mt-1 mr-4"></i>
-                            <p class="text-lg">Autonomie jusqu'à 80km</p>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check-circle text-green-500 text-xl mt-1 mr-4"></i>
                             <p class="text-lg">Garantie constructeur 2 ans</p>
                         </div>
                         <div class="flex items-start">
@@ -453,54 +442,62 @@
                     </div>
                 </div>
                 
-                <form id="eligibilityForm" method="POST" action="https://formspree.io/f/mwpnwnnr">
-
+                <form id="eligibilityForm">
                     <!-- Étape 1 -->
                     <div id="step1" class="form-step active">
-                        <h4 class="text-xl font-bold text-gray-900 mb-6">1️⃣ Votre structure</h4>
+                        <h4 class="text-xl font-bold text-gray-900 mb-6">1️⃣ Informations de l'entreprise</h4>
                         
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                SIRET ou nom de l'entreprise *
+                                Nom de l'entreprise *
                             </label>
-                            <input type="text" id="siret" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
-                                   placeholder="Saisissez 14 chiffres pour un SIRET ou au moins 3 caractères pour rechercher par nom">
-                            <div id="siretError" class="error-message"></div>
+                            <input type="text" id="nomEntreprise" name="nomEntreprise" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
+                                   placeholder="Nom de votre entreprise" required>
+                            <div id="nomEntrepriseError" class="error-message"></div>
                         </div>
                         
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Type d'organisme *
+                                Numéro SIREN *
                             </label>
-                            <select id="typeOrganisme" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                                <option value="">Sélectionnez votre type d'organisme</option>
-                                <option value="entreprise">Entreprise</option>
-                                <option value="association">Association</option>
-                                <option value="collectivite">Collectivité</option>
-                                <option value="auto-entrepreneur">Auto-entrepreneur</option>
-                                <option value="artisan">Artisan</option>
-                                <option value="commerce">Commerce</option>
-                                <option value="autre">Autre</option>
+                            <input type="text" id="numeroSiren" name="numeroSiren" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
+                                   placeholder="9 chiffres" required maxlength="9">
+                            <div id="numeroSirenError" class="error-message"></div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Nombre d'employés *
+                            </label>
+                            <select id="nombreEmployes" name="nombreEmployes" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" required>
+                                <option value="">Sélectionnez</option>
+                                <option value="1-10">1-10 employés</option>
+                                <option value="11-50">11-50 employés</option>
+                                <option value="51-250">51-250 employés</option>
+                                <option value="250+">Plus de 250 employés</option>
                             </select>
-                            <div id="typeError" class="error-message"></div>
+                            <div id="nombreEmployesError" class="error-message"></div>
                         </div>
                         
                         <div class="mb-8">
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Raison sociale
+                                Secteur d'activité *
                             </label>
-                            <input type="text" id="raisonSociale" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
-                                   placeholder="Nom de votre entreprise/association">
-                        </div>
-                        
-                        <div class="mb-8">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Effectif *
-                            </label>
-                            <input type="number" id="effectif" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
-                                   placeholder="Nombre de salariés" min="1">
-                            <p class="text-sm text-gray-500 mt-1">Plafond vélos = 1 par salarié.</p>
-                            <div id="effectifError" class="error-message"></div>
+                            <select id="secteurActivite" name="secteurActivite" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" required>
+                                <option value="">Sélectionnez votre secteur</option>
+                                <option value="Commerce">Commerce</option>
+                                <option value="Services">Services</option>
+                                <option value="Artisanat">Artisanat</option>
+                                <option value="BTP">BTP</option>
+                                <option value="Restauration">Restauration</option>
+                                <option value="Santé">Santé</option>
+                                <option value="Transport/Livraison">Transport/Livraison</option>
+                                <option value="Association">Association</option>
+                                <option value="Collectivité">Collectivité</option>
+                                <option value="Entrepreneur">Entrepreneur</option>
+                                <option value="Autre">Autre</option>
+                            </select>
+                            <div id="secteurActiviteError" class="error-message"></div>
                         </div>
                         
                         <button type="button" id="nextStep" class="w-full btn-primary text-white py-4 rounded-lg font-semibold text-lg">
@@ -510,15 +507,15 @@
                     
                     <!-- Étape 2 -->
                     <div id="step2" class="form-step">
-                        <h4 class="text-xl font-bold text-gray-900 mb-6">2️⃣ Vos coordonnées</h4>
+                        <h4 class="text-xl font-bold text-gray-900 mb-6">2️⃣ Informations de contact et demande</h4>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
                                     Prénom *
                                 </label>
-                                <input type="text" id="prenom" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
-                                       placeholder="Votre prénom">
+                                <input type="text" id="prenom" name="prenom" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
+                                       placeholder="Votre prénom" required>
                                 <div id="prenomError" class="error-message"></div>
                             </div>
                             
@@ -526,50 +523,64 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
                                     Nom *
                                 </label>
-                                <input type="text" id="nom" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
-                                       placeholder="Votre nom">
+                                <input type="text" id="nom" name="nom" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
+                                       placeholder="Votre nom" required>
                                 <div id="nomError" class="error-message"></div>
                             </div>
                         </div>
                         
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Email *
+                                Email professionnel *
                             </label>
-                            <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
-                                   placeholder="votre@email.com">
+                            <input type="email" id="email" name="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
+                                   placeholder="votre@entreprise.com" required>
                             <div id="emailError" class="error-message"></div>
                         </div>
                         
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Téléphone
+                                Téléphone *
                             </label>
-                            <input type="tel" id="telephone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
-                                   placeholder="06 12 34 56 78">
+                            <input type="tel" id="telephone" name="telephone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" 
+                                   placeholder="06 12 34 56 78" required>
+                            <div id="telephoneError" class="error-message"></div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Nombre de vélos souhaités *
+                            </label>
+                            <select id="nombreVelos" name="nombreVelos" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" required>
+                                <option value="">Sélectionnez</option>
+                                <option value="1">1 vélo</option>
+                                <option value="2">2 vélos</option>
+                                <option value="3">3 vélos</option>
+                                <option value="4">4 vélos</option>
+                                <option value="5">5 vélos</option>
+                                <option value="6">6 vélos</option>
+                                <option value="7">7 vélos</option>
+                                <option value="8">8 vélos</option>
+                                <option value="9">9 vélos</option>
+                                <option value="10">10 vélos</option>
+                                <option value="Autre">Autre (préciser)</option>
+                            </select>
+                            <div id="nombreVelosError" class="error-message"></div>
                         </div>
                         
                         <div class="mb-8">
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                KBIS/SIREN (obligatoire) *
+                                Usage principal *
                             </label>
-                            <div class="file-upload-area" id="fileUploadArea">
-                                <input type="file" id="document" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" class="hidden">
-                                <div id="uploadContent">
-                                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
-                                    <p class="text-lg font-medium text-gray-700 mb-2">Glissez votre document ici ou cliquez pour sélectionner</p>
-                                    <p class="text-sm text-gray-500">KBIS pour entreprises, justificatif SIREN pour associations</p>
-                                    <p class="text-sm text-gray-500">Formats acceptés : PDF, JPG, PNG, DOC (max 10MB)</p>
-                                </div>
-                                <div id="fileSelected" class="hidden">
-                                    <i class="fas fa-file-alt text-4xl text-green-500 mb-4"></i>
-                                    <p id="fileName" class="text-lg font-medium text-gray-700"></p>
-                                    <button type="button" id="removeFile" class="text-red-500 hover:text-red-700 mt-2">
-                                        <i class="fas fa-trash mr-1"></i> Supprimer
-                                    </button>
-                                </div>
-                            </div>
-                            <div id="documentError" class="error-message"></div>
+                            <select id="usagePrincipal" name="usagePrincipal" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" required>
+                                <option value="">Sélectionnez l'usage</option>
+                                <option value="Livraisons">Livraisons</option>
+                                <option value="Déplacements professionnels">Déplacements professionnels</option>
+                                <option value="Transport d'outils">Transport d'outils</option>
+                                <option value="Services à domicile">Services à domicile</option>
+                                <option value="Autre">Autre</option>
+                            </select>
+                            <div id="usagePrincipalError" class="error-message"></div>
                         </div>
                         
                         <div class="flex flex-col sm:flex-row gap-4">
@@ -588,6 +599,9 @@
             </div>
         </div>
     </section>
+
+    <!-- Iframe Google Forms invisible -->
+    <iframe id="googleFormIframe" name="googleFormIframe" src="about:blank" style="display:none;" width="0" height="0"></iframe>
 
     <!-- FAQ -->
     <section id="faq" class="py-20 bg-white">
@@ -674,35 +688,26 @@
     <script>
         // Variables globales
         let currentStep = 1;
-        let formData = {};
-        let uploadedFile = null;
 
         // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
             initializeForm();
         });
 
-        // Gestion du formulaire
         function initializeForm() {
             const nextBtn = document.getElementById('nextStep');
             const prevBtn = document.getElementById('prevStep');
-            const submitBtn = document.getElementById('submitBtn');
             const form = document.getElementById('eligibilityForm');
 
-            // Écouteurs d'événements
             nextBtn.addEventListener('click', nextStep);
             prevBtn.addEventListener('click', prevStep);
             form.addEventListener('submit', submitForm);
             
-            // Upload de fichier
-            setupFileUpload();
-            
-            // Validation en temps réel
             setupRealTimeValidation();
         }
 
         function setupRealTimeValidation() {
-            const fields = ['siret', 'typeOrganisme', 'effectif', 'prenom', 'nom', 'email'];
+            const fields = ['nomEntreprise', 'numeroSiren', 'nombreEmployes', 'secteurActivite', 'prenom', 'nom', 'email', 'telephone', 'nombreVelos', 'usagePrincipal'];
             fields.forEach(fieldId => {
                 const field = document.getElementById(fieldId);
                 if (field) {
@@ -718,19 +723,15 @@
             const value = field.value.trim();
             const errorElement = document.getElementById(fieldId + 'Error');
             
-            // Effacer l'erreur précédente
             if (errorElement) {
                 errorElement.textContent = '';
             }
 
-            // Validation basique
-            if (field.hasAttribute('required') || field.parentElement.querySelector('label').textContent.includes('*')) {
-                if (!value) {
-                    if (errorElement) {
-                        errorElement.textContent = 'Ce champ est obligatoire';
-                    }
-                    return false;
+            if (field.required && !value) {
+                if (errorElement) {
+                    errorElement.textContent = 'Ce champ est obligatoire';
                 }
+                return false;
             }
 
             // Validations spécifiques
@@ -744,20 +745,10 @@
                 }
             }
 
-            if (fieldId === 'siret' && value) {
-                if (value.length < 3) {
+            if (fieldId === 'numeroSiren' && value) {
+                if (!/^\d{9}$/.test(value)) {
                     if (errorElement) {
-                        errorElement.textContent = 'Minimum 3 caractères';
-                    }
-                    return false;
-                }
-            }
-
-            if (fieldId === 'effectif' && value) {
-                const effectif = parseInt(value);
-                if (effectif < 1 || effectif > 1000) {
-                    if (errorElement) {
-                        errorElement.textContent = 'Effectif doit être entre 1 et 1000';
+                        errorElement.textContent = 'Le SIREN doit contenir exactement 9 chiffres';
                     }
                     return false;
                 }
@@ -766,118 +757,39 @@
             return true;
         }
 
-        function setupFileUpload() {
-            const fileUploadArea = document.getElementById('fileUploadArea');
-            const fileInput = document.getElementById('document');
-            const uploadContent = document.getElementById('uploadContent');
-            const fileSelected = document.getElementById('fileSelected');
-            const fileName = document.getElementById('fileName');
-            const removeFileBtn = document.getElementById('removeFile');
-
-            // Click pour sélectionner
-            fileUploadArea.addEventListener('click', () => {
-                fileInput.click();
-            });
-
-            // Drag & Drop
-            fileUploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                fileUploadArea.classList.add('dragover');
-            });
-
-            fileUploadArea.addEventListener('dragleave', () => {
-                fileUploadArea.classList.remove('dragover');
-            });
-
-            fileUploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                fileUploadArea.classList.remove('dragover');
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    handleFileSelection(files[0]);
-                }
-            });
-
-            // Sélection de fichier
-            fileInput.addEventListener('change', (e) => {
-                if (e.target.files.length > 0) {
-                    handleFileSelection(e.target.files[0]);
-                }
-            });
-
-            // Supprimer fichier
-            removeFileBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                uploadedFile = null;
-                fileInput.value = '';
-                uploadContent.classList.remove('hidden');
-                fileSelected.classList.add('hidden');
-                document.getElementById('documentError').textContent = '';
-            });
-        }
-
-        function handleFileSelection(file) {
-            // Vérification du type de fichier
-            const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-            if (!allowedTypes.includes(file.type)) {
-                document.getElementById('documentError').textContent = 'Type de fichier non supporté. Utilisez PDF, JPG, PNG ou DOC.';
-                return;
-            }
-
-            // Vérification de la taille (10MB max)
-            if (file.size > 10 * 1024 * 1024) {
-                document.getElementById('documentError').textContent = 'Le fichier est trop volumineux (maximum 10MB).';
-                return;
-            }
-
-            // Stocker le fichier
-            uploadedFile = file;
-            
-            // Afficher le fichier sélectionné
-            document.getElementById('fileName').textContent = file.name;
-            document.getElementById('uploadContent').classList.add('hidden');
-            document.getElementById('fileSelected').classList.remove('hidden');
-            document.getElementById('documentError').textContent = '';
-
-            console.log('Fichier sélectionné:', file.name, file.type, file.size);
-        }
-
         function nextStep() {
-            console.log('Passage à l\'étape suivante...');
-            
             // Validation de l'étape 1
-            const siret = document.getElementById('siret').value.trim();
-            const typeOrganisme = document.getElementById('typeOrganisme').value;
-            const effectif = document.getElementById('effectif').value.trim();
+            const nomEntreprise = document.getElementById('nomEntreprise').value.trim();
+            const numeroSiren = document.getElementById('numeroSiren').value.trim();
+            const nombreEmployes = document.getElementById('nombreEmployes').value;
+            const secteurActivite = document.getElementById('secteurActivite').value;
 
             let isValid = true;
 
-            // Vérification SIRET
-            if (!siret) {
-                document.getElementById('siretError').textContent = 'Ce champ est obligatoire';
+            if (!nomEntreprise) {
+                document.getElementById('nomEntrepriseError').textContent = 'Ce champ est obligatoire';
                 isValid = false;
-            } else {
-                document.getElementById('siretError').textContent = '';
             }
 
-            // Vérification type d'organisme
-            if (!typeOrganisme) {
-                document.getElementById('typeError').textContent = 'Veuillez sélectionner un type d\'organisme';
+            if (!numeroSiren) {
+                document.getElementById('numeroSirenError').textContent = 'Ce champ est obligatoire';
                 isValid = false;
-            } else {
-                document.getElementById('typeError').textContent = '';
+            } else if (!/^\d{9}$/.test(numeroSiren)) {
+                document.getElementById('numeroSirenError').textContent = 'Le SIREN doit contenir exactement 9 chiffres';
+                isValid = false;
             }
 
-            // Vérification effectif
-            if (!effectif || parseInt(effectif) < 1) {
-                document.getElementById('effectifError').textContent = 'Veuillez indiquer un effectif valide';
+            if (!nombreEmployes) {
+                document.getElementById('nombreEmployesError').textContent = 'Ce champ est obligatoire';
                 isValid = false;
-            } else {
-                document.getElementById('effectifError').textContent = '';
+            }
+
+            if (!secteurActivite) {
+                document.getElementById('secteurActiviteError').textContent = 'Ce champ est obligatoire';
+                isValid = false;
             }
 
             if (!isValid) {
-                console.log('Validation échouée pour l\'étape 1');
                 return;
             }
 
@@ -887,8 +799,6 @@
             document.getElementById('stepIndicator').textContent = 'Étape 2 sur 2';
             document.getElementById('progressBar').style.width = '100%';
             currentStep = 2;
-
-            console.log('Passage à l\'étape 2 réussi');
         }
 
         function prevStep() {
@@ -901,41 +811,92 @@
 
         function submitForm(event) {
             event.preventDefault();
-            console.log('Soumission du formulaire...');
-
-            // Effacer les messages précédents
+            
             document.getElementById('submitError').textContent = '';
             document.getElementById('submitSuccess').textContent = '';
 
-            // Validation complète
-            const isValid = validateCompleteForm();
-            
-            if (!isValid) {
-                console.log('Validation du formulaire échouée');
+            if (!validateCompleteForm()) {
                 return;
             }
 
-            // Collecter toutes les données
-            const formData = {
-                timestamp: new Date().toISOString(),
-                siret: document.getElementById('siret').value.trim(),
-                typeOrganisme: document.getElementById('typeOrganisme').value,
-                raisonSociale: document.getElementById('raisonSociale').value.trim(),
-                effectif: parseInt(document.getElementById('effectif').value),
-                prenom: document.getElementById('prenom').value.trim(),
-                nom: document.getElementById('nom').value.trim(),
-                email: document.getElementById('email').value.trim(),
-                telephone: document.getElementById('telephone').value.trim(),
-                hasDocument: uploadedFile !== null,
-                documentName: uploadedFile ? uploadedFile.name : '',
-                documentType: uploadedFile ? uploadedFile.type : '',
-                documentSize: uploadedFile ? uploadedFile.size : 0
+            // Soumettre directement à Google Forms
+            submitToGoogleForms();
+        }
+
+        function validateCompleteForm() {
+            let isValid = true;
+            const requiredFields = ['nomEntreprise', 'numeroSiren', 'nombreEmployes', 'secteurActivite', 'prenom', 'nom', 'email', 'telephone', 'nombreVelos', 'usagePrincipal'];
+
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                const value = field.value.trim();
+                const errorElement = document.getElementById(fieldId + 'Error');
+
+                if (!value) {
+                    if (errorElement) {
+                        errorElement.textContent = 'Ce champ est obligatoire';
+                    }
+                    isValid = false;
+                }
+            });
+
+            // Validation email
+            const email = document.getElementById('email').value.trim();
+            if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                document.getElementById('emailError').textContent = 'Format d\'email invalide';
+                isValid = false;
+            }
+
+            // Validation SIREN
+            const siren = document.getElementById('numeroSiren').value.trim();
+            if (siren && !/^\d{9}$/.test(siren)) {
+                document.getElementById('numeroSirenError').textContent = 'Le SIREN doit contenir exactement 9 chiffres';
+                isValid = false;
+            }
+
+            if (!isValid) {
+                document.getElementById('submitError').textContent = 'Veuillez corriger les erreurs dans le formulaire';
+            }
+
+            return isValid;
+        }
+
+        function submitToGoogleForms() {
+            // Créer un formulaire dynamique pour soumettre à Google Forms
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'https://docs.google.com/forms/d/e/1FAIpQLSelidB7-TA5FyfNdGzWVwAMHbEWy6QX7FVe0ds53MC7hAJbHg/formResponse';
+            form.target = 'googleFormIframe';
+
+            // Mapping des champs (vous devrez adapter les entry.xxx selon votre formulaire Google)
+            const fieldMapping = {
+                'entry.1234567890': 'nom', // Nom
+                'entry.1234567891': 'prenom', // Prénom  
+                'entry.1234567892': 'email', // Email professionnel
+                'entry.1234567893': 'telephone', // Téléphone
+                'entry.1234567894': 'nomEntreprise', // Nom entreprise
+                'entry.1234567895': 'numeroSiren', // Numéro SIREN
+                'entry.1234567896': 'nombreEmployes', // Nombre d'employés
+                'entry.1234567897': 'secteurActivite', // Secteur d'activité
+                'entry.1234567898': 'nombreVelos', // Nombre de vélos souhaités
+                'entry.1234567899': 'usagePrincipal' // Usage principal
             };
 
-            console.log('Données du formulaire:', formData);
+            // Ajouter tous les champs
+            Object.keys(fieldMapping).forEach(entryId => {
+                const fieldId = fieldMapping[entryId];
+                const fieldValue = document.getElementById(fieldId).value;
+                
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = entryId;
+                input.value = fieldValue;
+                form.appendChild(input);
+            });
 
-            // Envoyer à Formspree
-            saveFormData(formData);
+            // Ajouter le formulaire à la page et le soumettre
+            document.body.appendChild(form);
+            form.submit();
 
             // Afficher le message de succès
             document.getElementById('submitSuccess').innerHTML = `
@@ -943,146 +904,29 @@
                 Votre demande a été envoyée avec succès ! Vous recevrez une réponse sous 24h.
             `;
 
-            // Réinitialiser le formulaire après 3 secondes
+            // Nettoyer
+            document.body.removeChild(form);
+
+            // Réinitialiser après 3 secondes
             setTimeout(() => {
                 resetForm();
             }, 3000);
         }
 
-        function validateCompleteForm() {
-            console.log('Validation complète du formulaire...');
-            let isValid = true;
-
-            // Étape 1
-            const siret = document.getElementById('siret').value.trim();
-            const typeOrganisme = document.getElementById('typeOrganisme').value;
-            const effectif = document.getElementById('effectif').value.trim();
-
-            // Étape 2
-            const prenom = document.getElementById('prenom').value.trim();
-            const nom = document.getElementById('nom').value.trim();
-            const email = document.getElementById('email').value.trim();
-
-            // Vérifications basiques avec logs
-            if (!siret) {
-                console.log('SIRET manquant');
-                document.getElementById('submitError').textContent = 'Le SIRET/nom d\'entreprise est obligatoire';
-                isValid = false;
-            }
-
-            if (!typeOrganisme) {
-                console.log('Type d\'organisme manquant');
-                document.getElementById('submitError').textContent = 'Le type d\'organisme est obligatoire';
-                isValid = false;
-            }
-
-            if (!effectif || parseInt(effectif) < 1) {
-                console.log('Effectif invalide:', effectif);
-                document.getElementById('submitError').textContent = 'L\'effectif est obligatoire';
-                isValid = false;
-            }
-
-            if (!prenom) {
-                console.log('Prénom manquant');
-                document.getElementById('submitError').textContent = 'Le prénom est obligatoire';
-                isValid = false;
-            }
-
-            if (!nom) {
-                console.log('Nom manquant');
-                document.getElementById('submitError').textContent = 'Le nom est obligatoire';
-                isValid = false;
-            }
-
-            if (!email) {
-                console.log('Email manquant');
-                document.getElementById('submitError').textContent = 'L\'email est obligatoire';
-                isValid = false;
-            } else {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email)) {
-                    console.log('Email invalide:', email);
-                    document.getElementById('submitError').textContent = 'Format d\'email invalide';
-                    isValid = false;
-                }
-            }
-
-            // Vérification du document
-            if (!uploadedFile) {
-                console.log('Document manquant');
-                document.getElementById('submitError').textContent = 'Le document KBIS/SIREN est obligatoire';
-                isValid = false;
-            }
-
-            console.log('Validation complète:', isValid ? 'SUCCÈS' : 'ÉCHEC');
-            return isValid;
-        }
-
-        function saveFormData(data) {
-            try {
-                // FORMSPREE - Solution simple qui marche !
-                const formspreeUrl = 'https://formspree.io/f/mwpnwnnr';
-
-                // Préparer les données pour Formspree
-                const formData = new FormData();
-                formData.append('siret', data.siret || '');
-                formData.append('typeOrganisme', data.typeOrganisme || '');
-                formData.append('raisonSociale', data.raisonSociale || '');
-                formData.append('effectif', data.effectif || '');
-                formData.append('prenom', data.prenom || '');
-                formData.append('nom', data.nom || '');
-                formData.append('telephone', data.telephone || '');
-                formData.append('email', data.email || '');
-
-                // Ajouter le fichier si présent
-                if (uploadedFile) {
-                    formData.append('document', uploadedFile, uploadedFile.name);
-                }
-
-                // Envoyer à Formspree
-                fetch(formspreeUrl, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                })
-                .then(response => response.json())
-                .then(result => {
-                    console.log('Succès Formspree:', result);
-                })
-                .catch(error => {
-                    console.error('Erreur Formspree:', error);
-                });
-
-            } catch (error) {
-                console.error('Erreur generale:', error);
-            }
-        }
-
         function resetForm() {
-            // Réinitialiser le formulaire
             document.getElementById('eligibilityForm').reset();
             
-            // Remettre à l'étape 1
             document.getElementById('step2').classList.remove('active');
             document.getElementById('step1').classList.add('active');
             document.getElementById('stepIndicator').textContent = 'Étape 1 sur 2';
             document.getElementById('progressBar').style.width = '50%';
             currentStep = 1;
             
-            // Effacer les messages
             document.querySelectorAll('.error-message, .success-message').forEach(el => {
                 el.textContent = '';
             });
-            
-            // Réinitialiser l'upload
-            uploadedFile = null;
-            document.getElementById('uploadContent').classList.remove('hidden');
-            document.getElementById('fileSelected').classList.add('hidden');
         }
 
-        // Fonctions utilitaires
         function scrollToForm() {
             document.getElementById('formulaire').scrollIntoView({ 
                 behavior: 'smooth' 
@@ -1097,3 +941,12 @@
     </script>
 </body>
 </html>
+    <script id="html_badge_script1">
+        window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDqA3EAsemN6VfEEMt2CPuJgoL7k7tCaVlK5psThtVqW9yG2qaJX2J0dseAwPTByKqww7kjshyHuipxrfc9PpA%2F4lROodB0q32EBFYax%2FLFh4NOqEDu59%2BhtwhFhE0H3LkuDsVsR%2FlcfMkY8%2F3bAH45Z4x21JO%2BVFKuKt%2FNT3aMLSohkjQgctiUy0sla9oUV%2FarglIpsQutlsZ%2BVfzmZidnr2lv0O31xVKNAP9ARYeAdFUcfbXg9snLBjzIMlu5mRUzuyoJVtZ5SqOp9fjWpITwm4ZIR2C%2BzP6QkwAqa%2BXPKgCnztxpQ%2F5GZ7Wa9c3di5BfgPKp9D978y6Iyu7gl%2B8RtyFBXbjKd%2BUCqCZSk9BSL3Djp9NwIMmQSN6BQlIZdRP8GDQJrnBTkotg5l8kT5H0%2BT3a67Ew%2FIk%2BP4ku4U%2BFU7INtqNYU7KsuMViGTn0J6lodRfvNVkrQItZPNSSer0McSz%2Fv9RKeubk%2FoNg3lgtEYiiq0XqJ5vZqBvclgLnrjuyuP%2FvPHgnM3uE7Ke12HLso%3D";
+        window.__genspark_locale = "fr-FR";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDqA3EAsemN6VfEEMt2CPuJgoL7k7tCaVlK5psThtVqW9yG2qaJX2J0dseAwPTByKqww7kjshyHuipxrfc9PpA/4lROodB0q32EBFYax/LFh4NOqEDu59+htwhFhE0H3LkuDsVsR/lcfMkY8/3bAH45Z4x21JO+VFKuKt/NT3aMLSohkjQgctiUy0sla9oUV/arglIpsQutlsZ+VfzmZidnr2lv0O31xVKNAP9ARYeAdFUcfbXg9snLBjzIMlu5mRUzuyoJVtZ5SqOp9fjWpITwm4ZIR2C+zP6QkwAqa+XPKgCnztxpQ/5GZ7Wa9c3di5BfgPKp9D978y6Iyu7gl+8RtyFBXbjKd+UCqCZSk9BSL3Djp9NwIMmQSN6BQlIZdRP8GDQJrnBTkotg5l8kT5H0+T3a67Ew/Ik+P4ku4U+FU7INtqNYU7KsuMViGTn0J6lodRfvNVkrQItZPNSSer0McSz/v9RKeubk/oNg3lgtEYiiq0XqJ5vZqBvclgLnrjuyuP/vPHgnM3uE7Ke12HLso=";
+    </script>
+    
+    <script id="html_notice_dialog_script" src="https://www.genspark.ai/notice_dialog.js"></script>
+    
