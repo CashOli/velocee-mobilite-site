@@ -78,8 +78,13 @@
             font-size: 14px;
             margin-top: 5px;
         }
-        #googleFormIframe {
-            display: none;
+        .google-forms-integration {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 2px solid #0ea5e9;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
         }
     </style>
 </head>
@@ -588,7 +593,7 @@
                                 ← Précédent
                             </button>
                             <button type="submit" id="submitBtn" class="flex-1 btn-primary text-white py-4 rounded-lg font-semibold text-lg">
-                                Envoyer ma demande
+                                Continuer avec Google Forms →
                             </button>
                         </div>
                         
@@ -596,12 +601,32 @@
                         <div id="submitSuccess" class="success-message mt-4 text-center"></div>
                     </div>
                 </form>
+
+                <!-- Intégration Google Forms -->
+                <div id="googleFormsSection" class="google-forms-integration" style="display: none;">
+                    <h4 class="text-xl font-bold text-blue-900 mb-4">
+                        <i class="fas fa-external-link-alt mr-2"></i>
+                        Finaliser votre demande sur Google Forms
+                    </h4>
+                    <p class="text-gray-700 mb-4">
+                        Pour soumettre votre demande d'éligibilité, veuillez cliquer sur le bouton ci-dessous pour accéder à notre formulaire sécurisé Google Forms.
+                    </p>
+                    <p class="text-sm text-gray-600 mb-6">
+                        Vos informations seront pré-remplies. Vous pourrez également uploader vos documents KBIS/SIREN directement.
+                    </p>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSelidB7-TA5FyfNdGzWVwAMHbEWy6QX7FVe0ds53MC7hAJbHg/viewform" 
+                       target="_blank" 
+                       class="btn-primary text-white px-8 py-4 rounded-lg font-semibold text-lg inline-block">
+                        <i class="fas fa-arrow-right mr-2"></i>
+                        Ouvrir le formulaire Google Forms
+                    </a>
+                    <p class="text-xs text-gray-500 mt-4">
+                        Le formulaire s'ouvrira dans un nouvel onglet. Une fois complété, vous recevrez une confirmation par email.
+                    </p>
+                </div>
             </div>
         </div>
     </section>
-
-    <!-- Iframe Google Forms invisible -->
-    <iframe id="googleFormIframe" name="googleFormIframe" src="about:blank" style="display:none;" width="0" height="0"></iframe>
 
     <!-- FAQ -->
     <section id="faq" class="py-20 bg-white">
@@ -819,8 +844,8 @@
                 return;
             }
 
-            // Soumettre directement à Google Forms
-            submitToGoogleForms();
+            // Afficher la section Google Forms
+            showGoogleFormsSection();
         }
 
         function validateCompleteForm() {
@@ -861,69 +886,20 @@
             return isValid;
         }
 
-        function submitToGoogleForms() {
-            // Créer un formulaire dynamique pour soumettre à Google Forms
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = 'https://docs.google.com/forms/d/e/1FAIpQLSelidB7-TA5FyfNdGzWVwAMHbEWy6QX7FVe0ds53MC7hAJbHg/formResponse';
-            form.target = 'googleFormIframe';
-
-            // Mapping des champs (vous devrez adapter les entry.xxx selon votre formulaire Google)
-            const fieldMapping = {
-                'entry.1234567890': 'nom', // Nom
-                'entry.1234567891': 'prenom', // Prénom  
-                'entry.1234567892': 'email', // Email professionnel
-                'entry.1234567893': 'telephone', // Téléphone
-                'entry.1234567894': 'nomEntreprise', // Nom entreprise
-                'entry.1234567895': 'numeroSiren', // Numéro SIREN
-                'entry.1234567896': 'nombreEmployes', // Nombre d'employés
-                'entry.1234567897': 'secteurActivite', // Secteur d'activité
-                'entry.1234567898': 'nombreVelos', // Nombre de vélos souhaités
-                'entry.1234567899': 'usagePrincipal' // Usage principal
-            };
-
-            // Ajouter tous les champs
-            Object.keys(fieldMapping).forEach(entryId => {
-                const fieldId = fieldMapping[entryId];
-                const fieldValue = document.getElementById(fieldId).value;
-                
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = entryId;
-                input.value = fieldValue;
-                form.appendChild(input);
-            });
-
-            // Ajouter le formulaire à la page et le soumettre
-            document.body.appendChild(form);
-            form.submit();
-
-            // Afficher le message de succès
-            document.getElementById('submitSuccess').innerHTML = `
-                <i class="fas fa-check-circle mr-2"></i>
-                Votre demande a été envoyée avec succès ! Vous recevrez une réponse sous 24h.
-            `;
-
-            // Nettoyer
-            document.body.removeChild(form);
-
-            // Réinitialiser après 3 secondes
-            setTimeout(() => {
-                resetForm();
-            }, 3000);
-        }
-
-        function resetForm() {
-            document.getElementById('eligibilityForm').reset();
+        function showGoogleFormsSection() {
+            // Masquer le formulaire
+            document.getElementById('step2').style.display = 'none';
             
-            document.getElementById('step2').classList.remove('active');
-            document.getElementById('step1').classList.add('active');
-            document.getElementById('stepIndicator').textContent = 'Étape 1 sur 2';
-            document.getElementById('progressBar').style.width = '50%';
-            currentStep = 1;
+            // Afficher la section Google Forms
+            document.getElementById('googleFormsSection').style.display = 'block';
             
-            document.querySelectorAll('.error-message, .success-message').forEach(el => {
-                el.textContent = '';
+            // Mettre à jour l'indicateur
+            document.getElementById('stepIndicator').textContent = 'Finalisation';
+            document.getElementById('progressBar').style.width = '100%';
+            
+            // Scroll vers la section
+            document.getElementById('googleFormsSection').scrollIntoView({ 
+                behavior: 'smooth' 
             });
         }
 
@@ -943,9 +919,9 @@
 </html>
     <script id="html_badge_script1">
         window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
-            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDqA3EAsemN6VfEEMt2CPuJgoL7k7tCaVlK5psThtVqW9yG2qaJX2J0dseAwPTByKqww7kjshyHuipxrfc9PpA%2F4lROodB0q32EBFYax%2FLFh4NOqEDu59%2BhtwhFhE0H3LkuDsVsR%2FlcfMkY8%2F3bAH45Z4x21JO%2BVFKuKt%2FNT3aMLSohkjQgctiUy0sla9oUV%2FarglIpsQutlsZ%2BVfzmZidnr2lv0O31xVKNAP9ARYeAdFUcfbXg9snLBjzIMlu5mRUzuyoJVtZ5SqOp9fjWpITwm4ZIR2C%2BzP6QkwAqa%2BXPKgCnztxpQ%2F5GZ7Wa9c3di5BfgPKp9D978y6Iyu7gl%2B8RtyFBXbjKd%2BUCqCZSk9BSL3Djp9NwIMmQSN6BQlIZdRP8GDQJrnBTkotg5l8kT5H0%2BT3a67Ew%2FIk%2BP4ku4U%2BFU7INtqNYU7KsuMViGTn0J6lodRfvNVkrQItZPNSSer0McSz%2Fv9RKeubk%2FoNg3lgtEYiiq0XqJ5vZqBvclgLnrjuyuP%2FvPHgnM3uE7Ke12HLso%3D";
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDgOEAygO9gEGb4hTc1tDpo1eB7bBjjibFOh702JngGSijJ81yy3DkxwG5jLL%2FLWBI6UrQJEZWZRq02NyMy88r%2BThlnOj7ZB4MiCEtn8LUXlffBkGFO8JB01qtSx%2F9GYCDBuyANvXkF3Fy%2BXoaJzcqAwuxjGdh2MnmejIQ4F6nO2FBTlkEQxmegnDiPWc0qtjXhPAgi1pG5f6%2F8bn7ov3Kmkj4J1YfurWBlaz611Rceo%2FXnfxR8S4y2Cx262V2EtWS03Oiw836GWERqBVlzUD5GNsQs%2Bh2XFu46D%2FBBEe6bb3TYlSBAg6o2boZsv%2F1iwp%2F3BVohlVUQnrpqWt4GofVadt3P7bq%2Bw8CA9T8hWA4%2Ft0MrEIgnwp1vg2%2FzjD%2FYJWqmt42GUpD36sdmVd7Rdn8PoB1%2F8GYzohkY%2BVSsMLFFM8doI3PFSGhjhcPIGxLAbs9WvQaJeMCWTP6ydCgWwhU8nbS0WS6i2Xpn5qiYJOC7P8S%2B2Qbm53IMGnQDunGfW6cIR7s1S9ZcYKxaSdflCnwgs%3D";
         window.__genspark_locale = "fr-FR";
-        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDqA3EAsemN6VfEEMt2CPuJgoL7k7tCaVlK5psThtVqW9yG2qaJX2J0dseAwPTByKqww7kjshyHuipxrfc9PpA/4lROodB0q32EBFYax/LFh4NOqEDu59+htwhFhE0H3LkuDsVsR/lcfMkY8/3bAH45Z4x21JO+VFKuKt/NT3aMLSohkjQgctiUy0sla9oUV/arglIpsQutlsZ+VfzmZidnr2lv0O31xVKNAP9ARYeAdFUcfbXg9snLBjzIMlu5mRUzuyoJVtZ5SqOp9fjWpITwm4ZIR2C+zP6QkwAqa+XPKgCnztxpQ/5GZ7Wa9c3di5BfgPKp9D978y6Iyu7gl+8RtyFBXbjKd+UCqCZSk9BSL3Djp9NwIMmQSN6BQlIZdRP8GDQJrnBTkotg5l8kT5H0+T3a67Ew/Ik+P4ku4U+FU7INtqNYU7KsuMViGTn0J6lodRfvNVkrQItZPNSSer0McSz/v9RKeubk/oNg3lgtEYiiq0XqJ5vZqBvclgLnrjuyuP/vPHgnM3uE7Ke12HLso=";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDgOEAygO9gEGb4hTc1tDpo1eB7bBjjibFOh702JngGSijJ81yy3DkxwG5jLL/LWBI6UrQJEZWZRq02NyMy88r+ThlnOj7ZB4MiCEtn8LUXlffBkGFO8JB01qtSx/9GYCDBuyANvXkF3Fy+XoaJzcqAwuxjGdh2MnmejIQ4F6nO2FBTlkEQxmegnDiPWc0qtjXhPAgi1pG5f6/8bn7ov3Kmkj4J1YfurWBlaz611Rceo/XnfxR8S4y2Cx262V2EtWS03Oiw836GWERqBVlzUD5GNsQs+h2XFu46D/BBEe6bb3TYlSBAg6o2boZsv/1iwp/3BVohlVUQnrpqWt4GofVadt3P7bq+w8CA9T8hWA4/t0MrEIgnwp1vg2/zjD/YJWqmt42GUpD36sdmVd7Rdn8PoB1/8GYzohkY+VSsMLFFM8doI3PFSGhjhcPIGxLAbs9WvQaJeMCWTP6ydCgWwhU8nbS0WS6i2Xpn5qiYJOC7P8S+2Qbm53IMGnQDunGfW6cIR7s1S9ZcYKxaSdflCnwgs=";
     </script>
     
     <script id="html_notice_dialog_script" src="https://www.genspark.ai/notice_dialog.js"></script>
